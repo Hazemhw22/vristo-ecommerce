@@ -18,10 +18,10 @@ const product = {
   description:
     "The Smart Watch Pro is a premium smartwatch with advanced features including heart rate monitoring, GPS tracking, and a beautiful OLED display. It's water-resistant and has a battery life of up to 5 days.",
   images: [
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400",
+    "/pngimg.com - iphone16_PNG35.png?height=400&width=400",
+    "/pngimg.com - sony_playstation_PNG17546.png?height=400&width=400",
+    "/pngimg.com - iphone16_PNG35.png?height=400&width=400",
+    "/pngimg.com - sony_playstation_PNG17546.png?height=400&width=400",
   ],
 }
 
