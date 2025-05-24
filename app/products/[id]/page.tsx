@@ -260,23 +260,26 @@ export default function ProductDetail({ params }: ProductDetailProps) {
           <p className="text-gray-600 dark:text-gray-300 mb-6">{product.description}</p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex border border-gray-300 dark:border-gray-600 rounded-md">
+         <div className="flex border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden w-max">
               <button
-                className="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700"
+                className="w-14 h-14 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 aria-label="Decrease quantity"
               >
-                <Minus size={16} />
+                <Minus size={20} />
               </button>
-              <div className="w-12 h-12 flex items-center justify-center font-semibold">{quantity}</div>
+              <div className="w-14 h-14 flex items-center justify-center font-semibold text-lg select-none">
+                {quantity}
+              </div>
               <button
-                className="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700"
+                className="w-14 h-14 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
                 onClick={() => setQuantity(quantity + 1)}
                 aria-label="Increase quantity"
               >
-                <Plus size={16} />
+                <Plus size={20} />
               </button>
             </div>
+
 
             <button
               className="flex-1 h-12 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
