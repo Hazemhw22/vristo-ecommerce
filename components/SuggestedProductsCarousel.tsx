@@ -18,12 +18,12 @@ type SuggestedProduct = {
 }
 
 interface SuggestedProductsCarouselProps {
-  products: SuggestedProduct[]
+  products?: SuggestedProduct[]
   title?: string
 }
 
 export default function SuggestedProductsCarousel({
-  products,
+  products = [],
   title = "You might also like",
 }: SuggestedProductsCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)

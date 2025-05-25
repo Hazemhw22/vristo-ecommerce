@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { Heart, ShoppingBag, Minus, Plus, Star } from "lucide-react"
+import { Heart, ShoppingBag, Minus, Plus, Star, Printer, Share2, Copy, MessageCircle } from "lucide-react"
 import { useCart } from "../../../components/cart-provider"
 import SuggestedProductsCarousel from "../../../components/SuggestedProductsCarousel"
 
@@ -184,6 +184,8 @@ export default function ProductDetail({ params }: ProductDetailProps) {
   const [activeImage, setActiveImage] = useState(0)
   const [isFavorite, setIsFavorite] = useState(false)
   const [activeTab, setActiveTab] = useState("description")
+  const [selectedCapacity, setSelectedCapacity] = useState("128GB")
+  const [selectedColor, setSelectedColor] = useState("Black")
   const { addItem } = useCart()
 
   const handleAddToCart = () => {
@@ -196,12 +198,39 @@ export default function ProductDetail({ params }: ProductDetailProps) {
     })
   }
 
+  const handleShare = (type: string) => {
+    const url = window.location.href
+    const text = `Check out this ${product.name} - $${product.discountedPrice}`
+
+    switch (type) {
+      case "whatsapp":
+        window.open(`https://wa.me/?text=${encodeURIComponent(text + " " + url)}`, "_blank")
+        break
+      case "copy":
+        navigator.clipboard.writeText(url)
+        break
+      case "print":
+        window.print()
+        break
+      case "share":
+        if (navigator.share) {
+          navigator.share({ title: product.name, text, url })
+        }
+        break
+    }
+  }
+
   return (
     <div className="container mx-auto py-8 px-4">
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <div>
           <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden mb-4 h-80 flex items-center justify-center relative">
+            {/* Badges */}
+            <div className="absolute top-3 left-3 z-10 flex gap-2">
+              <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">New</span>
+              <span className="bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">Sale</span>
+            </div>
             <Image
               src={product.images[activeImage] || "/placeholder.svg"}
               alt={product.name}
@@ -211,7 +240,7 @@ export default function ProductDetail({ params }: ProductDetailProps) {
               priority
             />
           </div>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2 mb-4">
             {product.images.map((image, index) => (
               <div
                 key={index}
@@ -232,6 +261,38 @@ export default function ProductDetail({ params }: ProductDetailProps) {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Share Buttons */}
+          <div className="flex gap-2 justify-center">
+            <button
+              onClick={() => handleShare("print")}
+              className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              title="Print"
+            >
+              <Printer size={18} />
+            </button>
+            <button
+              onClick={() => handleShare("whatsapp")}
+              className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              title="Share on WhatsApp"
+            >
+              <MessageCircle size={18} />
+            </button>
+            <button
+              onClick={() => handleShare("copy")}
+              className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              title="Copy Link"
+            >
+              <Copy size={18} />
+            </button>
+            <button
+              onClick={() => handleShare("share")}
+              className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              title="Share"
+            >
+              <Share2 size={18} />
+            </button>
           </div>
         </div>
 
@@ -259,27 +320,67 @@ export default function ProductDetail({ params }: ProductDetailProps) {
 
           <p className="text-gray-600 dark:text-gray-300 mb-6">{product.description}</p>
 
+          {/* Product Options */}
+          <div className="space-y-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium mb-2">Select Capacity:</label>
+              <div className="flex gap-2">
+                {["128GB", "256GB", "512GB"].map((capacity) => (
+                  <button
+                    key={capacity}
+                    onClick={() => setSelectedCapacity(capacity)}
+                    className={`px-4 py-2 border rounded-md text-sm font-medium transition-colors ${
+                      selectedCapacity === capacity
+                        ? "border-blue-600 bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
+                        : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+                    }`}
+                  >
+                    {capacity}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">Select Color:</label>
+              <div className="flex gap-2">
+                {["Black", "White", "Blue", "Red"].map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    className={`px-4 py-2 border rounded-md text-sm font-medium transition-colors ${
+                      selectedColor === color
+                        ? "border-blue-600 bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
+                        : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+                    }`}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4">
-         <div className="flex border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden w-max">
+            <div className="flex border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden w-max">
               <button
-                className="w-14 h-14 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                className="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 aria-label="Decrease quantity"
               >
                 <Minus size={20} />
               </button>
-              <div className="w-14 h-14 flex items-center justify-center font-semibold text-lg select-none">
+              <div className="w-12 h-12 flex items-center justify-center font-semibold text-lg select-none">
                 {quantity}
               </div>
               <button
-                className="w-14 h-14 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                className="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
                 onClick={() => setQuantity(quantity + 1)}
                 aria-label="Increase quantity"
               >
                 <Plus size={20} />
               </button>
             </div>
-
 
             <button
               className="flex-1 h-12 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
@@ -384,7 +485,7 @@ export default function ProductDetail({ params }: ProductDetailProps) {
         {activeTab === "reviews" && (
           <div className="space-y-6">
             <div className="text-center py-8">
-              <p className="text-gray-500 dark:text-gray-400">Reviews feature coming soon!</p>
+              <p className="text-gray-500 dark:text-gray-400">Suggested Products!</p>
             </div>
           </div>
         )}
