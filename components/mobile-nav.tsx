@@ -40,8 +40,8 @@ export function MobileNav({ onCartToggle }: MobileNavProps) {
           <ShoppingBag size={24} />
           Cart
           {totalItems > 0 && (
-            <span className="absolute -top-1 -right-3 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-              {totalItems}
+            <span className="absolute -top-1 -right-3 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white font-medium">
+              {totalItems > 9 ? "9+" : totalItems}
             </span>
           )}
         </button>

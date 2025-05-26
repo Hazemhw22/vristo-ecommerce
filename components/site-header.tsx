@@ -9,17 +9,15 @@ import { VristoLogo } from "./vristo-logo"
 import { LanguageSelector } from "./language-select"
 import { SimpleThemeToggle } from "./theme-toggle"
 import { useOnClickOutside } from "../hooks/use-click-outside"
+import { CartSidebar } from "./cart-sidebar"
 
-interface SiteHeaderProps {
-  onCartToggle?: () => void
-}
-
-export function SiteHeader({ onCartToggle }: SiteHeaderProps) {
+export function SiteHeader() {
   const [mounted, setMounted] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [cartOpen, setCartOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const { totalItems } = useCart()
+  const { totalItems, totalPrice } = useCart()
 
   // Close search when clicking outside
   useOnClickOutside(searchRef, () => setSearchOpen(false))
@@ -34,6 +32,10 @@ export function SiteHeader({ onCartToggle }: SiteHeaderProps) {
     }
   }, [searchOpen])
 
+  const handleCartToggle = () => {
+    setCartOpen(true)
+  }
+
   return (
     <>
       {/* Desktop Header */}
@@ -47,9 +49,9 @@ export function SiteHeader({ onCartToggle }: SiteHeaderProps) {
             </span>
 
             <div className="flex items-center gap-3">
-               {/* Desktop Theme Toggle */}
+              {/* Desktop Theme Toggle */}
               {mounted && <SimpleThemeToggle />}
-              
+
               {/* Language Selector */}
               <LanguageSelector />
             </div>
@@ -169,15 +171,18 @@ export function SiteHeader({ onCartToggle }: SiteHeaderProps) {
 
             {/* Shopping Cart - Desktop only */}
             <button
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative hidden md:block"
-              onClick={onCartToggle}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative hidden md:flex md:items-center md:gap-2"
+              onClick={handleCartToggle}
               aria-label="Cart"
             >
               <ShoppingBag size={20} />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white font-medium">
-                  {totalItems}
-                </span>
+                <>
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white font-medium md:static md:bg-blue-600 md:dark:bg-blue-500 md:ml-1">
+                    {totalItems}
+                  </span>
+                  <span className="hidden lg:inline text-sm font-medium">${totalPrice.toFixed(2)}</span>
+                </>
               )}
             </button>
 
@@ -213,8 +218,11 @@ export function SiteHeader({ onCartToggle }: SiteHeaderProps) {
 
       {/* Mobile navigation menu - only shows on mobile */}
       <div className="md:hidden">
-        <MobileNav onCartToggle={onCartToggle ?? (() => {})} />
+        <MobileNav onCartToggle={handleCartToggle} />
       </div>
+
+      {/* Cart Sidebar - Works for both desktop and mobile */}
+      <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </>
   )
 }
