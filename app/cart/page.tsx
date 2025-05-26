@@ -22,7 +22,6 @@ export default function CartPage() {
   const total = subtotal + shipping + tax - discount
 
   const handleApplyPromo = () => {
-    // Mock promo codes
     const promoCodes: Record<string, number> = {
       SAVE10: 10,
       WELCOME20: 20,
@@ -64,72 +63,74 @@ export default function CartPage() {
           <ArrowLeft size={16} className="mr-1" />
           Continue Shopping
         </Link>
-        <h1 className="text-3xl font-bold">Shopping Cart</h1>
-        <p className="text-gray-600">
+        <h1 className="text-2xl sm:text-3xl font-bold">Shopping Cart</h1>
+        <p className="text-sm sm:text-base text-gray-600">
           {items.length} {items.length === 1 ? "item" : "items"} in your cart
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Cart Items</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {items.map((item) => (
-                <div key={item.id} className="flex gap-4 p-4 border rounded-lg">
-                  <div className="relative w-20 h-20 rounded-md overflow-hidden flex-shrink-0">
-                    <Image
-                      src={item.image || "/placeholder.svg?height=80&width=80"}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+            <CardContent className="overflow-x-auto sm:overflow-visible">
+              <div className="flex gap-4 snap-x snap-mandatory sm:flex-col">
+                {items.map((item) => (
+                  <div key={item.id} className="flex gap-4 p-4 border rounded-lg min-w-[280px] snap-start sm:min-w-full">
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden flex-shrink-0">
+                      <Image
+                        src={item.image || "/placeholder.svg?height=80&width=80"}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
 
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg">{item.name}</h3>
-                    <p className="text-gray-600">${item.price.toFixed(2)} each</p>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-base sm:text-lg">{item.name}</h3>
+                      <p className="text-gray-600 text-sm">${item.price.toFixed(2)} each</p>
 
-                    <div className="flex items-center justify-between mt-3">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                          disabled={item.quantity <= 1}
-                        >
-                          <Minus size={14} />
-                        </Button>
-                        <span className="w-12 text-center font-medium">{item.quantity}</span>
-                        <Button variant="outline" size="sm" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                          <Plus size={14} />
-                        </Button>
-                      </div>
+                      <div className="flex items-center justify-between mt-3">
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                            disabled={item.quantity <= 1}
+                          >
+                            <Minus size={14} />
+                          </Button>
+                          <span className="w-10 text-center font-medium">{item.quantity}</span>
+                          <Button variant="outline" size="sm" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                            <Plus size={14} />
+                          </Button>
+                        </div>
 
-                      <div className="flex items-center gap-4">
-                        <span className="font-semibold text-lg">${(item.price * item.quantity).toFixed(2)}</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeItem(item.id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        >
-                          <Trash2 size={16} />
-                        </Button>
+                        <div className="flex items-center gap-4">
+                          <span className="font-semibold text-sm sm:text-lg">${(item.price * item.quantity).toFixed(2)}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeItem(item.id)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Order Summary */}
-        <div className="space-y-6">
+        <div className="space-y-6 mt-6 lg:mt-0">
           {/* Promo Code */}
           <Card>
             <CardHeader>
@@ -199,7 +200,7 @@ export default function CartPage() {
 
               {shipping > 0 && <p className="text-sm text-gray-600">Free shipping on orders over $100</p>}
 
-              <Link href="/app/checkout/page.tsx" className="block">
+              <Link href="/checkout" className="block">
                 <Button className="w-full mt-4" size="lg">
                   Proceed to Checkout
                 </Button>
