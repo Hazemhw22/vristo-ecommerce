@@ -245,28 +245,28 @@ export default function ProductDetail({ params }: ProductDetailProps) {
               className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               title="Print"
             >
-              <Printer size={18} />
+              <Printer size={22} />
             </button>
             <button
               onClick={() => handleShare("whatsapp")}
               className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               title="Share on WhatsApp"
             >
-              <MessageCircle size={18} />
+              <MessageCircle size={22} />
             </button>
             <button
               onClick={() => handleShare("copy")}
               className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               title="Copy Link"
             >
-              <Copy size={18} />
+              <Copy size={22} />
             </button>
             <button
               onClick={() => handleShare("share")}
               className="flex items-center justify-center w-10 h-10 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               title="Share"
             >
-              <Share2 size={18} />
+              <Share2 size={22} />
             </button>
           </div>
         </div>

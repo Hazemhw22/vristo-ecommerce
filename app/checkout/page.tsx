@@ -307,7 +307,13 @@ export default function CheckoutPage() {
                   onValueChange={(value) => handleInputChange("shippingMethod", value)}
                   className="space-y-3"
                 >
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div
+                    className={`flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.shippingMethod === "standard"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
                     <RadioGroupItem value="standard" id="standard" />
                     <Label htmlFor="standard" className="flex-1 cursor-pointer">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
@@ -320,7 +326,13 @@ export default function CheckoutPage() {
                     </Label>
                   </div>
 
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div
+                    className={`flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.shippingMethod === "express"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
                     <RadioGroupItem value="express" id="express" />
                     <Label htmlFor="express" className="flex-1 cursor-pointer">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
@@ -333,7 +345,13 @@ export default function CheckoutPage() {
                     </Label>
                   </div>
 
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div
+                    className={`flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.shippingMethod === "overnight"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
                     <RadioGroupItem value="overnight" id="overnight" />
                     <Label htmlFor="overnight" className="flex-1 cursor-pointer">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
@@ -363,7 +381,13 @@ export default function CheckoutPage() {
                   onValueChange={(value) => handleInputChange("paymentMethod", value)}
                   className="space-y-3"
                 >
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div
+                    className={`flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.paymentMethod === "card"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
                     <RadioGroupItem value="card" id="card" />
                     <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer">
                       <CreditCard size={18} />
@@ -371,7 +395,13 @@ export default function CheckoutPage() {
                     </Label>
                   </div>
 
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div
+                    className={`flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.paymentMethod === "bank"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
                     <RadioGroupItem value="bank" id="bank" />
                     <Label htmlFor="bank" className="flex items-center gap-2 cursor-pointer">
                       <Banknote size={18} />
@@ -379,7 +409,13 @@ export default function CheckoutPage() {
                     </Label>
                   </div>
 
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div
+                    className={`flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.paymentMethod === "instore"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
                     <RadioGroupItem value="instore" id="instore" />
                     <Label htmlFor="instore" className="flex items-center gap-2 cursor-pointer">
                       <Building2 size={18} />
@@ -387,7 +423,13 @@ export default function CheckoutPage() {
                     </Label>
                   </div>
 
-                  <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div
+                    className={`flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.paymentMethod === "paypal"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
                     <RadioGroupItem value="paypal" id="paypal" />
                     <Label htmlFor="paypal" className="flex items-center gap-2 cursor-pointer">
                       <span className="text-blue-600 font-bold">PayPal</span>
@@ -395,7 +437,7 @@ export default function CheckoutPage() {
                   </div>
                 </RadioGroup>
 
-                {/* Credit Card Fields */}
+                {/* Credit Card Fields - Now positioned after the RadioGroup */}
                 {formData.paymentMethod === "card" && (
                   <div className="space-y-4 mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                     <h4 className="font-medium text-sm">Card Information</h4>
@@ -453,7 +495,7 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {/* Bank Transfer Fields */}
+                {/* Bank Transfer Fields - Now positioned after the RadioGroup */}
                 {formData.paymentMethod === "bank" && (
                   <div className="space-y-4 mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                     <div className="flex items-center gap-2">
@@ -467,7 +509,7 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {/* In-Store Payment Fields */}
+                {/* In-Store Payment Fields - Now positioned after the RadioGroup */}
                 {formData.paymentMethod === "instore" && (
                   <div className="space-y-4 mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
                     <div className="flex items-center gap-2">
