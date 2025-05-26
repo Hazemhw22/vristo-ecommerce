@@ -11,6 +11,7 @@ type SuggestedProduct = {
   price: number
   discountedPrice: number
   rating: number
+  reviews: number
   image: string
   store?: string
   category?: string
@@ -106,6 +107,11 @@ export default function SuggestedProductsCarousel({
 
   const cardWidth = 192 + 16 // 192px card width + 16px gap
   const translateX = -currentIndex * cardWidth
+
+  // Don't render if no products
+  if (!products || products.length === 0) {
+    return null
+  }
 
   return (
     <div className="mb-8">

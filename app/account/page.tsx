@@ -163,23 +163,23 @@ export default function ProfilePage() {
           {/* Tab Navigation */}
           <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5 h-auto p-1">
             <TabsTrigger value="account" className="flex items-center gap-2 py-3">
-              <User size={16} />
+              <User size={20} />
               <span className="hidden sm:inline">Account</span>
             </TabsTrigger>
             <TabsTrigger value="orders" className="flex items-center gap-2 py-3">
-              <Package size={16} />
+              <Package size={20} />
               <span className="hidden sm:inline">Orders</span>
             </TabsTrigger>
             <TabsTrigger value="wishlist" className="flex items-center gap-2 py-3">
-              <Heart size={16} />
+              <Heart size={20} />
               <span className="hidden sm:inline">Wishlist</span>
             </TabsTrigger>
             <TabsTrigger value="addresses" className="flex items-center gap-2 py-3">
-              <MapPin size={16} />
+              <MapPin size={20} />
               <span className="hidden sm:inline">Addresses</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2 py-3">
-              <Settings size={16} />
+              <Settings size={20} />
               <span className="hidden sm:inline">Settings</span>
             </TabsTrigger>
           </TabsList>
