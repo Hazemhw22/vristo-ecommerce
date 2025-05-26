@@ -28,8 +28,6 @@ export function PopularProducts({ count = 12 }: { count?: number }) {
   }))
 
   const itemsPerView = {
-    mobile: 2,
-    tablet: 3,
     desktop: 5,
   }
 
@@ -59,11 +57,11 @@ export function PopularProducts({ count = 12 }: { count?: number }) {
         </div>
 
         <div className="relative" {...swipeHandlers}>
-          {/* Navigation Arrows */}
+          {/* Navigation Arrows (only on larger screens) */}
           {currentIndex > 0 && (
             <button
               onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               aria-label="Previous products"
             >
               <ChevronLeft size={20} />
@@ -73,21 +71,25 @@ export function PopularProducts({ count = 12 }: { count?: number }) {
           {currentIndex < maxIndex && (
             <button
               onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-800 shadow-lg rounded-full p-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               aria-label="Next products"
             >
               <ChevronRight size={20} />
             </button>
           )}
 
-          {/* Products Grid */}
-          <div className="overflow-hidden">
+          {/* Scrollable Container for Mobile */}
+          <div className="overflow-x-auto sm:overflow-hidden">
             <div
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 transition-transform duration-300"
-              style={{ transform: `translateX(-${currentIndex * (100 / itemsPerView.desktop)}%)` }}
+              className="flex sm:grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 flex-nowrap"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / itemsPerView.desktop)}%)`,
+              }}
             >
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <div key={product.id} className="min-w-[70%] sm:min-w-0">
+                  <ProductCard product={product} />
+                </div>
               ))}
             </div>
           </div>
