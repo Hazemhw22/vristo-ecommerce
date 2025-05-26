@@ -7,6 +7,7 @@ import Image from "next/image"
 import * as Dialog from "@radix-ui/react-dialog"
 import { Heart, Plus, Star, ShoppingBag, Eye, Minus } from "lucide-react"
 import { useCart } from "./cart-provider"
+import { useFavorites } from "./favourite-items"
 import { Button } from "./ui/button"
 
 type SuggestedProduct = {
@@ -15,6 +16,7 @@ type SuggestedProduct = {
   price: number
   discountedPrice: number
   rating: number
+  reviews: number
   image: string
   store?: string
   category?: string
@@ -26,11 +28,11 @@ interface SuggestedProductCardProps {
 }
 
 const SuggestedProductCard = ({ product }: SuggestedProductCardProps) => {
-  const [favorite, setFavorite] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [isHovered, setIsHovered] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { addItem } = useCart()
+  const { isFavorite, toggleFavorite } = useFavorites()
 
   const handleAddToCart = () => {
     addItem({
@@ -43,14 +45,19 @@ const SuggestedProductCard = ({ product }: SuggestedProductCardProps) => {
     setQuantity(1)
   }
 
-  const toggleFavorite = (e: React.MouseEvent) => {
+  const handleToggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setFavorite(!favorite)
-    if (!favorite) {
-      console.log(`Added ${product.name} to favorites!`)
-    } else {
-      console.log(`Removed ${product.name} from favorites!`)
-    }
+    toggleFavorite({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      discountedPrice: product.discountedPrice,
+      image: product.image,
+      store: product.store || "Unknown Store",
+      rating: product.rating,
+      reviews: product.reviews,
+      inStock: true,
+    })
   }
 
   const discountPercentage = Math.round(((product.price - product.discountedPrice) / product.price) * 100)
@@ -74,19 +81,19 @@ const SuggestedProductCard = ({ product }: SuggestedProductCardProps) => {
 
           {/* Favorite Button */}
           <button
-            onClick={toggleFavorite}
+            onClick={handleToggleFavorite}
             className={`absolute top-2 right-2 z-10 p-1.5 rounded-full backdrop-blur-sm transition-all duration-200 ${
-              favorite
+              isFavorite(product.id)
                 ? "bg-red-500 text-white shadow-lg"
                 : "bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
             }`}
           >
-            <Heart size={12} fill={favorite ? "currentColor" : "none"} />
+            <Heart size={12} fill={isFavorite(product.id) ? "currentColor" : "none"} />
           </button>
 
           {/* Product Image */}
           <Image
-            src={product.image ?? "/pngimg.com - iphone16_PNG35.png"}
+            src={product.image || "/placeholder.svg?height=128&width=128"}
             alt={product.name}
             fill
             className="object-contain p-2 group-hover:scale-110 transition-transform duration-500"
@@ -107,7 +114,6 @@ const SuggestedProductCard = ({ product }: SuggestedProductCardProps) => {
             >
               <Eye size={14} />
             </button>
-            
           </div>
         </div>
 
@@ -175,7 +181,7 @@ const SuggestedProductCard = ({ product }: SuggestedProductCardProps) => {
               {/* Product Image */}
               <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-800">
                 <Image
-                  src={product.image ?? "/pngimg.com - iphone16_PNG35.png"}
+                  src={product.image || "/placeholder.svg?height=400&width=400"}
                   alt={product.name}
                   fill
                   className="object-contain p-4"
@@ -209,7 +215,9 @@ const SuggestedProductCard = ({ product }: SuggestedProductCardProps) => {
                       />
                     ))}
                   </div>
-                  <span className="text-gray-600 dark:text-gray-400">{product.rating}.0 (42 reviews)</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    {product.rating}.0 ({product.reviews || 42} reviews)
+                  </span>
                 </div>
 
                 {/* Description */}
@@ -235,15 +243,15 @@ const SuggestedProductCard = ({ product }: SuggestedProductCardProps) => {
 
                 {/* Favorite Button */}
                 <button
-                  onClick={toggleFavorite}
+                  onClick={handleToggleFavorite}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
-                    favorite
+                    isFavorite(product.id)
                       ? "bg-red-500 text-white border-red-500"
                       : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
                   } transition-colors`}
                 >
-                  <Heart size={16} fill={favorite ? "currentColor" : "none"} />
-                  {favorite ? "Remove from Favorites" : "Add to Favorites"}
+                  <Heart size={16} fill={isFavorite(product.id) ? "currentColor" : "none"} />
+                  {isFavorite(product.id) ? "Remove from Favorites" : "Add to Favorites"}
                 </button>
 
                 {/* Quantity Selector */}

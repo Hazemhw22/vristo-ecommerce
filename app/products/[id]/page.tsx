@@ -1,9 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Heart, ShoppingBag, Minus, Plus, Star, Printer, Share2, Copy, MessageCircle } from "lucide-react"
 import { useCart } from "../../../components/cart-provider"
+import { useFavorites } from "../../../components/favourite-items"
+import { ImageLightbox } from "../../../components/image-lightbox"
 import SuggestedProductsCarousel from "../../../components/SuggestedProductsCarousel"
 
 // Mock data - in a real app, you'd fetch the product via API based on id
@@ -19,10 +21,11 @@ const product = {
   description:
     "The Smart Watch Pro is a premium smartwatch with advanced features including heart rate monitoring, GPS tracking, and a beautiful OLED display. It's water-resistant and has a battery life of up to 5 days.",
   images: [
-    "/pngimg.com - iphone16_PNG35.png?height=400&width=400",
-    "/pngtree-smart-electronic-apple-watches-vector-set-png-image_5155507.png?height=400&width=400",
-    "/pngimg.com - iphone16_PNG35.png?height=400&width=400",
-    "/pngtree-smart-electronic-apple-watches-vector-set-png-image_5155507.png?height=400&width=400",
+    "/pngimg.com - iphone16_PNG35.png?height=400&width=400&text=Main+Image",
+    "/pngtree-smart-electronic-apple-watches-vector-set-png-image_5155507.png?height=400&width=400&text=Side+View",
+    "/pngimg.com - iphone16_PNG35.png?height=400&width=400&text=Main+Image",
+    "/pngtree-smart-electronic-apple-watches-vector-set-png-image_5155507.png?height=400&width=400&text=Side+View",
+    "/pngimg.com - iphone16_PNG35.png?height=400&width=400&text=Main+Image",
   ],
   specifications: [
     {
@@ -70,7 +73,7 @@ const product = {
   ],
 }
 
-// Mock suggested products with more items to demonstrate scrolling
+// Mock suggested products
 const suggestedProducts = [
   {
     id: 2,
@@ -79,6 +82,7 @@ const suggestedProducts = [
     price: 150,
     discountedPrice: 120,
     rating: 4.5,
+    reviews: 89,
     image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
     category: "Audio",
     description: "Premium wireless earbuds with active noise cancellation and superior sound quality.",
@@ -90,6 +94,7 @@ const suggestedProducts = [
     price: 25,
     discountedPrice: 20,
     rating: 4.2,
+    reviews: 156,
     image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
     category: "Accessories",
     description: "Durable protective case with military-grade drop protection and wireless charging compatibility.",
@@ -101,75 +106,10 @@ const suggestedProducts = [
     price: 40,
     discountedPrice: 32,
     rating: 4.7,
+    reviews: 203,
     image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
     category: "Power",
     description: "High-capacity portable charger with fast charging technology and multiple device support.",
-  },
-  {
-    id: 5,
-    name: "Bluetooth Speaker",
-    store: "Audio Tech",
-    price: 80,
-    discountedPrice: 64,
-    rating: 4.3,
-    image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
-    category: "Audio",
-    description: "Waterproof Bluetooth speaker with 360-degree sound and 12-hour battery life.",
-  },
-  {
-    id: 6,
-    name: "Fitness Tracker",
-    store: "Health Tech",
-    price: 60,
-    discountedPrice: 48,
-    rating: 4.1,
-    image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
-    category: "Fitness",
-    description: "Advanced fitness tracker with heart rate monitoring and sleep analysis.",
-  },
-  {
-    id: 7,
-    name: "Wireless Mouse",
-    store: "Computer Accessories",
-    price: 35,
-    discountedPrice: 28,
-    rating: 4.4,
-    image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
-    category: "Computer",
-    description: "Ergonomic wireless mouse with precision tracking and long battery life.",
-  },
-  {
-    id: 8,
-    name: "USB-C Hub",
-    store: "Tech Accessories",
-    price: 55,
-    discountedPrice: 44,
-    rating: 4.6,
-    image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
-    category: "Computer",
-    description: "Multi-port USB-C hub with HDMI, USB 3.0, and fast charging support.",
-  },
-  {
-    id: 9,
-    name: "Wireless Keyboard",
-    store: "Computer Accessories",
-    price: 70,
-    discountedPrice: 56,
-    rating: 4.3,
-    image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
-    category: "Computer",
-    description: "Mechanical wireless keyboard with RGB backlighting and programmable keys.",
-  },
-  {
-    id: 10,
-    name: "Smart Home Hub",
-    store: "Smart Home",
-    price: 120,
-    discountedPrice: 96,
-    rating: 4.5,
-    image: "/pngimg.com - sony_playstation_PNG17546.png?height=200&width=200",
-    category: "Smart Home",
-    description: "Central hub for controlling all your smart home devices with voice commands.",
   },
 ]
 
@@ -182,11 +122,21 @@ interface ProductDetailProps {
 export default function ProductDetail({ params }: ProductDetailProps) {
   const [quantity, setQuantity] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
-  const [isFavorite, setIsFavorite] = useState(false)
   const [activeTab, setActiveTab] = useState("description")
   const [selectedCapacity, setSelectedCapacity] = useState("128GB")
   const [selectedColor, setSelectedColor] = useState("Black")
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const { addItem } = useCart()
+  const { isFavorite, toggleFavorite } = useFavorites()
+
+  // Auto-rotate images every 6 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveImage((prev) => (prev + 1) % product.images.length)
+    }, 6000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const handleAddToCart = () => {
     addItem({
@@ -195,6 +145,20 @@ export default function ProductDetail({ params }: ProductDetailProps) {
       price: product.discountedPrice,
       image: product.images[0],
       quantity,
+    })
+  }
+
+  const handleToggleFavorite = () => {
+    toggleFavorite({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      discountedPrice: product.discountedPrice,
+      image: product.images[0],
+      store: product.store,
+      rating: product.rating,
+      reviews: product.reviews,
+      inStock: true,
     })
   }
 
@@ -225,7 +189,11 @@ export default function ProductDetail({ params }: ProductDetailProps) {
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden mb-4 h-80 flex items-center justify-center relative">
+          {/* Main Image with Auto-rotation */}
+          <div
+            className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden mb-4 h-80 flex items-center justify-center relative cursor-pointer"
+            onClick={() => setLightboxOpen(true)}
+          >
             {/* Badges */}
             <div className="absolute top-3 left-3 z-10 flex gap-2">
               <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">New</span>
@@ -236,27 +204,34 @@ export default function ProductDetail({ params }: ProductDetailProps) {
               alt={product.name}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain"
+              className="object-contain transition-opacity duration-500"
               priority
             />
+            {/* Click to view indicator */}
+            <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors flex items-center justify-center">
+              <div className="opacity-0 hover:opacity-100 transition-opacity bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                Click to view full size
+              </div>
+            </div>
           </div>
-          <div className="grid grid-cols-4 gap-2 mb-4">
+
+          {/* Thumbnail Images */}
+          <div className="grid grid-cols-5 gap-2 mb-4">
             {product.images.map((image, index) => (
               <div
                 key={index}
-                className={`border-2 rounded-md overflow-hidden cursor-pointer ${
-                  activeImage === index ? "border-blue-600" : "border-transparent"
+                className={`border-2 rounded-md overflow-hidden cursor-pointer transition-all ${
+                  activeImage === index ? "border-blue-600 scale-105" : "border-transparent hover:border-gray-300"
                 }`}
                 onClick={() => setActiveImage(index)}
               >
-                <div className="relative h-20 w-full">
+                <div className="relative h-16 w-full">
                   <Image
                     src={image || "/placeholder.svg"}
                     alt={`${product.name} - Image ${index + 1}`}
                     fill
                     sizes="80px"
                     className="object-contain"
-                    priority={index === 0}
                   />
                 </div>
               </div>
@@ -393,13 +368,13 @@ export default function ProductDetail({ params }: ProductDetailProps) {
 
             <button
               className="w-12 h-12 border border-gray-300 dark:border-gray-600 rounded-md flex items-center justify-center"
-              onClick={() => setIsFavorite(!isFavorite)}
-              aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              onClick={handleToggleFavorite}
+              aria-label={isFavorite(product.id) ? "Remove from favorites" : "Add to favorites"}
             >
               <Heart
                 size={20}
-                fill={isFavorite ? "currentColor" : "none"}
-                className={isFavorite ? "text-red-500" : ""}
+                fill={isFavorite(product.id) ? "currentColor" : "none"}
+                className={isFavorite(product.id) ? "text-red-500" : ""}
               />
             </button>
           </div>
@@ -485,7 +460,7 @@ export default function ProductDetail({ params }: ProductDetailProps) {
         {activeTab === "reviews" && (
           <div className="space-y-6">
             <div className="text-center py-8">
-              <p className="text-gray-500 dark:text-gray-400">Suggested Products!</p>
+              <p className="text-gray-500 dark:text-gray-400">Reviews coming soon!</p>
             </div>
           </div>
         )}
@@ -493,6 +468,15 @@ export default function ProductDetail({ params }: ProductDetailProps) {
 
       {/* Enhanced Suggested Products Carousel */}
       <SuggestedProductsCarousel products={suggestedProducts} />
+
+      {/* Image Lightbox */}
+      <ImageLightbox
+        images={product.images}
+        currentIndex={activeImage}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        productName={product.name}
+      />
     </div>
   )
 }

@@ -43,170 +43,212 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <ShoppingBag size={64} className="mx-auto text-gray-400 mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Your cart is empty</h1>
-          <p className="text-gray-600 mb-6">Looks like you haven't added anything to your cart yet.</p>
-          <Link href="/products">
-            <Button>Continue Shopping</Button>
-          </Link>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-md mx-auto text-center">
+            <ShoppingBag size={80} className="mx-auto text-gray-400 mb-6" />
+            <h1 className="text-2xl font-bold mb-3">Your cart is empty</h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
+              Looks like you haven't added anything to your cart yet.
+            </p>
+            <Link href="/products">
+              <Button size="lg" className="w-full">
+                Continue Shopping
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6">
-        <Link href="/products" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 mb-4">
-          <ArrowLeft size={16} className="mr-1" />
-          Continue Shopping
-        </Link>
-        <h1 className="text-2xl sm:text-3xl font-bold">Shopping Cart</h1>
-        <p className="text-sm sm:text-base text-gray-600">
-          {items.length} {items.length === 1 ? "item" : "items"} in your cart
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto px-4 py-4 lg:py-8">
+        {/* Header */}
+        <div className="mb-6">
+          <Link
+            href="/products"
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 mb-4"
+          >
+            <ArrowLeft size={16} className="mr-2" />
+            Continue Shopping
+          </Link>
+          <h1 className="text-2xl lg:text-3xl font-bold mb-2">Shopping Cart</h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            {items.length} {items.length === 1 ? "item" : "items"} in your cart
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Cart Items */}
-        <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Cart Items</CardTitle>
-            </CardHeader>
-            <CardContent className="overflow-x-auto sm:overflow-visible">
-              <div className="flex gap-4 snap-x snap-mandatory sm:flex-col">
-                {items.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-4 border rounded-lg min-w-[280px] snap-start sm:min-w-full">
-                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden flex-shrink-0">
-                      <Image
-                        src={item.image || "/placeholder.svg?height=80&width=80"}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
+        {/* Mobile-first layout */}
+        <div className="space-y-6 lg:grid lg:grid-cols-3 lg:gap-8 lg:space-y-0">
+          {/* Cart Items */}
+          <div className="lg:col-span-2">
+            <div className="space-y-4">
+              {items.map((item) => (
+                <Card key={item.id} className="overflow-hidden">
+                  <CardContent className="p-4">
+                    <div className="flex gap-4">
+                      {/* Product Image */}
+                      <div className="relative w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                        <Image
+                          src={item.image || "/placeholder.svg?height=96&width=96"}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
 
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-base sm:text-lg">{item.name}</h3>
-                      <p className="text-gray-600 text-sm">${item.price.toFixed(2)} each</p>
+                      {/* Product Details */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex-1 min-w-0 pr-2">
+                            <h3 className="font-semibold text-base lg:text-lg truncate">{item.name}</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">${item.price.toFixed(2)} each</p>
+                          </div>
 
-                      <div className="flex items-center justify-between mt-3">
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
-                            disabled={item.quantity <= 1}
-                          >
-                            <Minus size={14} />
-                          </Button>
-                          <span className="w-10 text-center font-medium">{item.quantity}</span>
-                          <Button variant="outline" size="sm" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                            <Plus size={14} />
-                          </Button>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                          <span className="font-semibold text-sm sm:text-lg">${(item.price * item.quantity).toFixed(2)}</span>
+                          {/* Remove button - Top right on mobile */}
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => removeItem(item.id)}
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 p-2"
                           >
-                            <Trash2 size={16} />
+                            <Trash2 size={18} />
                           </Button>
+                        </div>
+
+                        {/* Quantity and Price Row */}
+                        <div className="flex items-center justify-between">
+                          {/* Quantity Controls */}
+                          <div className="flex items-center gap-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                              disabled={item.quantity <= 1}
+                              className="h-9 w-9 p-0"
+                            >
+                              <Minus size={16} />
+                            </Button>
+                            <span className="font-medium text-base min-w-[2rem] text-center">{item.quantity}</span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              className="h-9 w-9 p-0"
+                            >
+                              <Plus size={16} />
+                            </Button>
+                          </div>
+
+                          {/* Item Total */}
+                          <div className="text-right">
+                            <span className="font-bold text-lg">${(item.price * item.quantity).toFixed(2)}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Order Summary Sidebar */}
+          <div className="space-y-6">
+            {/* Promo Code */}
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg">Promo Code</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {appliedPromo ? (
+                  <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                    <div>
+                      <p className="font-medium text-green-800 dark:text-green-200">{appliedPromo.code}</p>
+                      <p className="text-sm text-green-600 dark:text-green-400">{appliedPromo.discount}% off applied</p>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={removePromo} className="text-red-600 hover:text-red-700">
+                      Remove
+                    </Button>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Order Summary */}
-        <div className="space-y-6 mt-6 lg:mt-0">
-          {/* Promo Code */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Promo Code</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {appliedPromo ? (
-                <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div>
-                    <p className="font-medium text-green-800">{appliedPromo.code}</p>
-                    <p className="text-sm text-green-600">{appliedPromo.discount}% off applied</p>
+                ) : (
+                  <div className="space-y-4">
+                    <Input
+                      placeholder="Enter promo code"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
+                      className="text-base"
+                    />
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={handleApplyPromo}
+                      disabled={!promoCode.trim()}
+                      size="lg"
+                    >
+                      Apply Code
+                    </Button>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                      Try: SAVE10, WELCOME20, or SUMMER15
+                    </p>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={removePromo} className="text-red-600">
-                    Remove
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Order Summary */}
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg">Order Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3 text-base">
+                  <div className="flex justify-between">
+                    <span>Subtotal</span>
+                    <span className="font-medium">${subtotal.toFixed(2)}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Shipping</span>
+                    <span className="font-medium">{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Tax</span>
+                    <span className="font-medium">${tax.toFixed(2)}</span>
+                  </div>
+
+                  {appliedPromo && (
+                    <div className="flex justify-between text-green-600 dark:text-green-400">
+                      <span>Discount ({appliedPromo.code})</span>
+                      <span className="font-medium">-${discount.toFixed(2)}</span>
+                    </div>
+                  )}
+
+                  <Separator />
+
+                  <div className="flex justify-between text-xl font-bold">
+                    <span>Total</span>
+                    <span>${total.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                {shipping > 0 && (
+                  <p className="text-sm text-gray-600 dark:text-gray-400 text-center bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                    💡 Free shipping on orders over $100
+                  </p>
+                )}
+
+                <Link href="/checkout" className="block">
+                  <Button className="w-full mt-6" size="lg">
+                    Proceed to Checkout
                   </Button>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <Input
-                    placeholder="Enter promo code"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                  />
-                  <Button variant="outline" className="w-full" onClick={handleApplyPromo} disabled={!promoCode.trim()}>
-                    Apply Code
-                  </Button>
-                  <p className="text-xs text-gray-500">Try: SAVE10, WELCOME20, or SUMMER15</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Order Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Order Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Tax</span>
-                <span>${tax.toFixed(2)}</span>
-              </div>
-
-              {appliedPromo && (
-                <div className="flex justify-between text-green-600">
-                  <span>Discount ({appliedPromo.code})</span>
-                  <span>-${discount.toFixed(2)}</span>
-                </div>
-              )}
-
-              <Separator />
-
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total</span>
-                <span>${total.toFixed(2)}</span>
-              </div>
-
-              {shipping > 0 && <p className="text-sm text-gray-600">Free shipping on orders over $100</p>}
-
-              <Link href="/checkout" className="block">
-                <Button className="w-full mt-4" size="lg">
-                  Proceed to Checkout
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

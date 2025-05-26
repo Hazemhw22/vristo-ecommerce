@@ -1,13 +1,13 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import * as Dialog from "@radix-ui/react-dialog"
 import { Heart, Plus, Star, ShoppingBag, Eye } from "lucide-react"
 import { useCart } from "./cart-provider"
+import { useFavorites } from "./favourite-items"
 
 type Product = {
   id: number
@@ -27,11 +27,11 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const [favorite, setFavorite] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [isHovered, setIsHovered] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { addItem } = useCart()
+  const { isFavorite, toggleFavorite } = useFavorites()
 
   const handleAddToCart = () => {
     addItem({
@@ -44,19 +44,31 @@ const ProductCard = ({ product }: ProductCardProps) => {
     setQuantity(1)
   }
 
-  const toggleFavorite = (e: React.MouseEvent) => {
+  const handleToggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setFavorite(!favorite)
-    // Here you would typically call an API to add/remove from favorites
-    if (!favorite) {
-      // Show a toast or notification
-      console.log(`Added ${product.name} to favorites!`)
-    } else {
-      console.log(`Removed ${product.name} from favorites!`)
-    }
+    toggleFavorite({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      discountedPrice: product.discountedPrice,
+      image: product.image,
+      store: product.store,
+      rating: product.rating,
+      reviews: product.reviews,
+      inStock: true,
+    })
   }
 
   const discountPercentage = Math.round(((product.price - product.discountedPrice) / product.price) * 100)
+
+  // Additional images for the modal
+  const additionalImages = [
+    product.image,
+    "/placeholder.svg?height=400&width=400&text=Image+2",
+    "/placeholder.svg?height=400&width=400&text=Image+3",
+    "/placeholder.svg?height=400&width=400&text=Image+4",
+    "/placeholder.svg?height=400&width=400&text=Image+5",
+  ]
 
   return (
     <>
@@ -77,14 +89,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
           {/* Favorite Button */}
           <button
-            onClick={toggleFavorite}
+            onClick={handleToggleFavorite}
             className={`absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-sm transition-all duration-200 ${
-              favorite
+              isFavorite(product.id)
                 ? "bg-red-500 text-white shadow-lg"
                 : "bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
             }`}
           >
-            <Heart size={16} fill={favorite ? "currentColor" : "none"} />
+            <Heart size={16} fill={isFavorite(product.id) ? "currentColor" : "none"} />
           </button>
 
           {/* Product Image */}
@@ -163,15 +175,40 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
       </div>
 
-      {/* Product Modal */}
+      {/* Enhanced Product Modal */}
       <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-          <Dialog.Content className="fixed z-50 top-1/2 left-1/2 max-w-4xl w-[90vw] max-h-[85vh] overflow-auto rounded-2xl bg-white dark:bg-gray-900 shadow-2xl transform -translate-x-1/2 -translate-y-1/2 focus:outline-none border border-gray-200 dark:border-gray-700">
+          <Dialog.Content className="fixed z-50 top-1/2 left-1/2 max-w-5xl w-[95vw] max-h-[90vh] overflow-auto rounded-2xl bg-white dark:bg-gray-900 shadow-2xl transform -translate-x-1/2 -translate-y-1/2 focus:outline-none border border-gray-200 dark:border-gray-700">
             <div className="grid md:grid-cols-2 gap-8 p-6">
-              {/* Product Image */}
-              <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-800">
-                <Image src={product.image || "/placeholder.svg"} alt={product.name} fill className="object-cover" />
+              {/* Product Images */}
+              <div className="space-y-4">
+                {/* Main Image */}
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-800">
+                  <Image
+                    src={additionalImages[0] || "/placeholder.svg"}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* Additional Images Grid */}
+                <div className="grid grid-cols-4 gap-2">
+                  {additionalImages.slice(1).map((image, index) => (
+                    <div
+                      key={index}
+                      className="relative aspect-square rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800"
+                    >
+                      <Image
+                        src={image || "/placeholder.svg"}
+                        alt={`${product.name} - Image ${index + 2}`}
+                        fill
+                        className="object-cover hover:scale-110 transition-transform duration-300 cursor-pointer"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Product Details */}
@@ -225,15 +262,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
                 {/* Favorite Button */}
                 <button
-                  onClick={toggleFavorite}
+                  onClick={handleToggleFavorite}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
-                    favorite
+                    isFavorite(product.id)
                       ? "bg-red-500 text-white border-red-500"
                       : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
                   } transition-colors`}
                 >
-                  <Heart size={18} fill={favorite ? "currentColor" : "none"} />
-                  {favorite ? "Remove from Favorites" : "Add to Favorites"}
+                  <Heart size={18} fill={isFavorite(product.id) ? "currentColor" : "none"} />
+                  {isFavorite(product.id) ? "Remove from Favorites" : "Add to Favorites"}
                 </button>
 
                 {/* Quantity Selector */}
