@@ -98,6 +98,13 @@ export function SiteHeader() {
                 Products
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
               </Link>
+              <Link
+                href="/contact"
+                className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group"
+              >
+                Contact
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
+              </Link>
             </nav>
           </div>
 

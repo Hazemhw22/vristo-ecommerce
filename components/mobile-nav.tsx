@@ -93,8 +93,16 @@ export function MobileNav({ onCartToggle }: MobileNavProps) {
                 <span className="text-sm font-medium">Products</span>
               </Link>
               <Link
-                href="/account"
+                href="/contact"
                 className="flex flex-col items-center p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setShowMenu(false)}
+              >
+                <span className="text-2xl mb-2">📞</span>
+                <span className="text-sm font-medium">Contact</span>
+              </Link>
+              <Link
+                href="/account"
+                className="flex flex-col items-center p-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors col-span-2"
                 onClick={() => setShowMenu(false)}
               >
                 <span className="text-2xl mb-2">👤</span>

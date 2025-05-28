@@ -132,12 +132,11 @@ body {
 
 /* Smooth transitions for theme changes */
 .theme-transition {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.00001s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Dark mode debug indicator - remove in production */
 .dark body::before {
-  content: "🌙 Dark Mode Active";
   position: fixed;
   top: 10px;
   right: 10px;
@@ -152,7 +151,7 @@ body {
 
 /* Ensure dark mode transitions are smooth */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.001s ease, color 0.3s ease, border-color 0.000001s ;
 }
 
 /* Force dark mode styles to be more visible */
