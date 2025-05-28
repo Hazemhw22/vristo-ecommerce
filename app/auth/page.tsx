@@ -219,7 +219,7 @@ export default function AuthPage() {
                 </div>
               )}
 
-              <Link href="/profile">
+              <Link href="/account">
                 <Button
                   type="submit"
                   className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium"
@@ -410,7 +410,7 @@ export default function AuthPage() {
         )}
 
         {/* Submit */}
-        <Link href="/profile">
+        <Link href="/account">
           <Button
             type="submit"
             className="w-full h-16 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full text-lg"
