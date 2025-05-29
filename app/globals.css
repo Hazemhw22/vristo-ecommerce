@@ -187,17 +187,13 @@ body {
 
 .page-container {
   background-color: #ffffff;
-  border: 2px solid rgb(59, 130, 246);
-  animation: glow-blue 3s ease-in-out infinite;
-  border-radius: 0.75rem;
   transition: all 0.3s ease;
 }
 
 .dark .page-container {
   background-color: rgb(3 7 18);
-  border: 2px solid rgb(96, 165, 250);
-  animation: glow-blue-dark 3s ease-in-out infinite;
 }
+
 
 /* Page background matching body */
 .page-background {

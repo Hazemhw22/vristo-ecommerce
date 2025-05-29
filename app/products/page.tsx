@@ -107,7 +107,7 @@ export default function Products() {
 
       <div className="flex flex-col md:flex-row gap-6">
         {/* Sidebar filters */}
-        <aside className="hidden md:block md:w-1/4 sticky top-20 self-start bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <aside className="hidden md:block md:w-1/4 sticky top-20 self-start bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-400 dark:border-blue-800">
           <h2 className="text-xl font-bold flex items-center gap-2 mb-6">
             <SlidersHorizontal size={20} />
             Filters
@@ -154,7 +154,7 @@ export default function Products() {
                     onChange={() => toggleRating(star)}
                     className="accent-yellow-400"
                   />
-                  <span className="text-yellow-400 text-lg">{"★".repeat(star)}</span>
+                  <span className="text-yellow-400 text-3xl">{"★".repeat(star)}</span>
                 </label>
               ))}
             </div>
@@ -166,11 +166,11 @@ export default function Products() {
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
             <h1 className="text-2xl font-bold flex items-center gap-2">Products Page</h1>
             <div className="flex items-center gap-4 w-full md:w-auto">
-              <Input type="text" placeholder="Search products..." className="w-full md:w-80" />
+              <Input type="text" placeholder="Search products..." className="w-full md:w-80  border border-gray-400 dark:border-blue-800" />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2 whitespace-nowrap">
-                    <SortIcon className="w-6 h-6 text-gray-500 dark:text-gray-200" />
+                  <Button variant="outline" className="flex items-center gap-2 whitespace-nowrap  border border-gray-400 dark:border-blue-800">
+                    <SortIcon className="w-6 h-6 text-gray-500 dark:text-gray-200 " />
                     Sort
                   </Button>
                 </DropdownMenuTrigger>

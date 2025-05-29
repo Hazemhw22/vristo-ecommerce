@@ -314,13 +314,13 @@ export default function ShopsPage() {
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-3 gap-4 mb-4 text-center">
-                      <div className="flex flex-col items-center">
+                    <div className="grid grid-cols-3 gap-4 mb-4">
+                      <div className="flex flex-col ">
                         <div className="flex items-center gap-1 mb-1">
                           <Star className="h-4 w-4 text-yellow-500 fill-current" />
                           <span className="font-semibold text-gray-900 dark:text-white">{shop.rating}</span>
                         </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">({shop.reviewCount})</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">Reviews</span>
                       </div>
 
                       <div className="flex flex-col items-center">
@@ -334,7 +334,7 @@ export default function ShopsPage() {
                       <div className="flex flex-col items-center">
                         <div className="flex items-center gap-1 mb-1">
                           <Clock className="h-4 w-4 text-green-500" />
-                          <span className="font-semibold text-gray-900 dark:text-white text-xs">
+                          <span className="font-semibold text-gray-900 dark:text-white text-base">
                             {shop.deliveryTime}
                           </span>
                         </div>

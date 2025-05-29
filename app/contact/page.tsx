@@ -58,7 +58,7 @@ export default function InformationalPages() {
     switch (activeTab) {
       case "about":
         return (
-          <div className="space-y-8 w-full">
+          <div className="space-y-8 w-full ">
             <div>
               <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">About Vristo</h2>
               <div className="prose prose-lg dark:prose-invert max-w-none">
@@ -76,7 +76,7 @@ export default function InformationalPages() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 w-full">
-              <Card className="bg-background border-blue-200 dark:border-blue-800">
+              <Card className="bg-background border border-gray-400 dark:border-blue-800 ">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-gray-800 dark:text-gray-200">
                     <Info className="h-5 w-5 text-blue-600" />
@@ -91,7 +91,7 @@ export default function InformationalPages() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-background border-blue-200 dark:border-blue-800">
+              <Card className="bg-background  border border-gray-400 dark:border-blue-800">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-gray-800 dark:text-gray-200">
                     <Shield className="h-5 w-5 text-green-600" />
@@ -156,7 +156,7 @@ export default function InformationalPages() {
 
             <div className="grid lg:grid-cols-2 gap-8 w-full">
               {/* Contact Form */}
-              <Card className="bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-800 w-full">
+              <Card className="bg-white dark:bg-gray-800  border border-gray-400 dark:border-blue-800 w-full">
                 <CardHeader>
                   <CardTitle className="text-gray-900 dark:text-gray-200">Send us a Message</CardTitle>
                   <CardDescription className="text-gray-600 dark:text-gray-400">
@@ -176,7 +176,7 @@ export default function InformationalPages() {
                         <Input
                           id="firstName"
                           placeholder="John"
-                          className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                          className="bg-white dark:bg-gray-700  border border-gray-400 dark:border-blue-800"
                         />
                       </div>
                       <div>
@@ -189,7 +189,7 @@ export default function InformationalPages() {
                         <Input
                           id="lastName"
                           placeholder="Doe"
-                          className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                          className="bg-white dark:bg-gray-700 border border-gray-400 dark:border-blue-800"
                         />
                       </div>
                     </div>
@@ -204,7 +204,7 @@ export default function InformationalPages() {
                         id="email"
                         type="email"
                         placeholder="john@example.com"
-                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                        className="bg-white dark:bg-gray-700 border border-gray-400 dark:border-blue-800"
                       />
                     </div>
                     <div>
@@ -217,7 +217,7 @@ export default function InformationalPages() {
                       <Input
                         id="phone"
                         placeholder="+972-50-123-4567"
-                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                        className="bg-white dark:bg-gray-700 border border-gray-400 dark:border-blue-800"
                       />
                     </div>
                     <div>
@@ -230,7 +230,7 @@ export default function InformationalPages() {
                       <Input
                         id="subject"
                         placeholder="How can we help you?"
-                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                        className="bg-white dark:bg-gray-700 border border-gray-400 dark:border-blue-800"
                       />
                     </div>
                     <div>
@@ -244,7 +244,7 @@ export default function InformationalPages() {
                         id="message"
                         rows={4}
                         placeholder="Tell us more about your inquiry..."
-                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                        className="bg-white dark:bg-gray-700  border border-gray-400 dark:border-blue-800"
                       />
                     </div>
                     <Button type="submit" className="w-full">
