@@ -108,8 +108,8 @@ export default function FavouritePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="page-background">
+      <div className="container mx-auto px-4 py-8  rounded-lg">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
@@ -121,9 +121,9 @@ export default function FavouritePage() {
               Back to Home
             </Link>
           </div>
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-blue-200 dark:border-blue-800 pb-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">My Favorites</h1>
+              <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">My Favorites</h1>
               <p className="text-gray-600 dark:text-gray-400">
                 {favorites.length} {favorites.length === 1 ? "item" : "items"} saved
               </p>
@@ -134,7 +134,11 @@ export default function FavouritePage() {
                   <ShoppingBag size={16} />
                   Add All to Cart
                 </Button>
-                <Button variant="outline" onClick={clearAllFavorites} className="text-red-600 hover:text-red-700">
+                <Button
+                  variant="outline"
+                  onClick={clearAllFavorites}
+                  className="text-red-600 hover:text-red-700 border-2 border-blue-200 dark:border-blue-800"
+                >
                   <Trash2 size={16} className="mr-2" />
                   Clear All
                 </Button>
@@ -145,7 +149,7 @@ export default function FavouritePage() {
 
         {favorites.length === 0 ? (
           /* Empty State */
-          <div className="text-center py-16">
+          <div className="text-center py-16  rounded-lg bg-white dark:bg-gray-800">
             <Heart size={80} className="mx-auto text-gray-400 mb-6" />
             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">No favorites yet</h2>
             <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
@@ -161,7 +165,7 @@ export default function FavouritePage() {
         ) : (
           <>
             {/* Filters and Controls */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg border-2 border-blue-200 dark:border-blue-800 p-4 mb-6">
               <div className="flex flex-col lg:flex-row gap-4">
                 {/* Search */}
                 <div className="flex-1">
@@ -171,7 +175,7 @@ export default function FavouritePage() {
                       placeholder="Search favorites..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
+                      className="pl-10 border-2 border-blue-200 dark:border-blue-800"
                     />
                   </div>
                 </div>
@@ -179,7 +183,7 @@ export default function FavouritePage() {
                 {/* Filters */}
                 <div className="flex flex-wrap gap-2">
                   <Select value={filterBy} onValueChange={setFilterBy}>
-                    <SelectTrigger className="w-40">
+                    <SelectTrigger className="w-40 border-2 border-blue-200 dark:border-blue-800">
                       <Filter size={16} className="mr-2" />
                       <SelectValue placeholder="Filter by store" />
                     </SelectTrigger>
@@ -194,7 +198,7 @@ export default function FavouritePage() {
                   </Select>
 
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-32">
+                    <SelectTrigger className="w-32 border-2 border-blue-200 dark:border-blue-800">
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
                     <SelectContent>
@@ -209,12 +213,12 @@ export default function FavouritePage() {
                     variant="outline"
                     size="sm"
                     onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                    className="px-3"
+                    className="px-3 border-2 border-blue-200 dark:border-blue-800"
                   >
                     {sortOrder === "asc" ? <SortAsc size={16} /> : <SortDesc size={16} />}
                   </Button>
 
-                  <div className="flex border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden">
+                  <div className="flex border-2 border-blue-200 dark:border-blue-800 rounded-md overflow-hidden">
                     <Button
                       variant={viewMode === "grid" ? "default" : "ghost"}
                       size="sm"
@@ -247,7 +251,7 @@ export default function FavouritePage() {
 
             {/* Favorites Grid/List */}
             {filteredAndSortedFavorites.length === 0 ? (
-              <div className="text-center py-12">
+              <div className="text-center py-12 border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-gray-800">
                 <Search size={48} className="mx-auto text-gray-400 mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No results found</h3>
                 <p className="text-gray-600 dark:text-gray-400">Try adjusting your search or filter criteria.</p>
@@ -255,10 +259,13 @@ export default function FavouritePage() {
             ) : viewMode === "grid" ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredAndSortedFavorites.map((item) => (
-                  <Card key={item.id} className="group hover:shadow-lg transition-shadow duration-300">
+                  <Card
+                    key={item.id}
+                    className="group hover:shadow-lg transition-shadow duration-300 border-2 border-blue-200 dark:border-blue-800"
+                  >
                     <CardContent className="p-4">
                       {/* Product Image */}
-                      <div className="relative aspect-square mb-4 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden">
+                      <div className="relative aspect-square mb-4 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden border border-blue-200 dark:border-blue-800">
                         <Image
                           src={item.image || "/placeholder.svg?height=200&width=200"}
                           alt={item.name}
@@ -336,7 +343,11 @@ export default function FavouritePage() {
                             Add to Cart
                           </Button>
                           <Link href={`/products/${item.id}`}>
-                            <Button variant="outline" size="sm" className="px-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="px-3 border-2 border-blue-200 dark:border-blue-800"
+                            >
                               <Eye size={16} />
                             </Button>
                           </Link>
@@ -350,11 +361,14 @@ export default function FavouritePage() {
               /* List View */
               <div className="space-y-4">
                 {filteredAndSortedFavorites.map((item) => (
-                  <Card key={item.id} className="hover:shadow-md transition-shadow">
+                  <Card
+                    key={item.id}
+                    className="hover:shadow-md transition-shadow border-2 border-blue-200 dark:border-blue-800"
+                  >
                     <CardContent className="p-4">
                       <div className="flex gap-4">
                         {/* Product Image */}
-                        <div className="relative w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="relative w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden flex-shrink-0 border border-blue-200 dark:border-blue-800">
                           <Image
                             src={item.image || "/placeholder.svg?height=96&width=96"}
                             alt={item.name}
@@ -435,7 +449,11 @@ export default function FavouritePage() {
                             {/* Actions */}
                             <div className="flex gap-2">
                               <Link href={`/products/${item.id}`}>
-                                <Button variant="outline" size="sm">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="border-2 border-blue-200 dark:border-blue-800"
+                                >
                                   <Eye size={16} className="mr-2" />
                                   View
                                 </Button>

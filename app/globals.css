@@ -151,7 +151,7 @@ body {
 
 /* Ensure dark mode transitions are smooth */
 * {
-  transition: background-color 0.001s ease, color 0.3s ease, border-color 0.000001s ;
+  transition: background-color 0.001s ease, color 0.3s ease, border-color 0.000001s;
 }
 
 /* Force dark mode styles to be more visible */
@@ -162,4 +162,79 @@ body {
 .dark body {
   background-color: rgb(3 7 18) !important;
   color: rgb(248 250 252) !important;
+}
+
+/* Blue glowing border animation */
+@keyframes glow-blue {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(59, 130, 246, 0.3), 0 0 15px rgba(59, 130, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
+  }
+}
+
+@keyframes glow-blue-dark {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(96, 165, 250, 0.5), 0 0 10px rgba(96, 165, 250, 0.3), 0 0 15px rgba(96, 165, 250, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.8), 0 0 20px rgba(96, 165, 250, 0.6), 0 0 30px rgba(96, 165, 250, 0.4);
+  }
+}
+
+.page-container {
+  background-color: #ffffff;
+  border: 2px solid rgb(59, 130, 246);
+  animation: glow-blue 3s ease-in-out infinite;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.dark .page-container {
+  background-color: rgb(3 7 18);
+  border: 2px solid rgb(96, 165, 250);
+  animation: glow-blue-dark 3s ease-in-out infinite;
+}
+
+/* Page background matching body */
+.page-background {
+  background-color: #ffffff;
+}
+
+.dark .page-background {
+  background-color: rgb(3 7 18);
+}
+
+/* Light mode specific overrides */
+.bg-background {
+  background-color: #ffffff !important;
+}
+
+.dark .bg-background {
+  background-color: rgb(3 7 18) !important;
+}
+
+/* Ensure white cards in light mode */
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+.dark .bg-white {
+  background-color: rgb(3 7 18) !important;
+}
+
+/* Light mode borders */
+.border-blue-200 {
+  border-color: rgb(191 219 254) !important;
+}
+
+.dark .border-blue-200 {
+  border-color: rgb(30 58 138) !important;
+}
+
+.dark .border-blue-800 {
+  border-color: rgb(30 58 138) !important;
 }

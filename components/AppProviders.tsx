@@ -12,9 +12,11 @@ export default function AppProviders({ children }: { children: React.ReactNode }
     <ThemeProvider>
       <CartProvider>
         <FavoritesProvider>
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen flex flex-col page-background">
             <SiteHeader />
-            <main className="flex-1 pb-16">{children}</main>
+            <main className="flex-1 pb-16 page-container max-w-7xl mx-auto w-full m-4 p-4 sm:p-6 lg:p-8">
+              {children}
+            </main>
             <SiteFooter />
           </div>
         </FavoritesProvider>

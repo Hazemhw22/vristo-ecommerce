@@ -64,10 +64,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
   // Additional images for the modal
   const additionalImages = [
     product.image,
-    "/pngimg.com - iphone16_PNG35.png?height=400&width=400&text=Image+2",
-    "/pngimg.com - iphone16_PNG35.png?height=400&width=400&text=Image+2",
-    "/pngimg.com - iphone16_PNG35.png?height=400&width=400&text=Image+2",
-    "/pngimg.com - iphone16_PNG35.png?height=400&width=400&text=Image+2",
+    "/placeholder.svg?height=400&width=400",
+    "/placeholder.svg?height=400&width=400",
+    "/placeholder.svg?height=400&width=400",
+    "/placeholder.svg?height=400&width=400",
   ]
 
   return (

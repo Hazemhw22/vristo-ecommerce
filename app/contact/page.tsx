@@ -58,16 +58,16 @@ export default function InformationalPages() {
     switch (activeTab) {
       case "about":
         return (
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">About Vristo</h2>
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">About Vristo</h2>
               <div className="prose prose-lg dark:prose-invert max-w-none">
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                  Welcome to Vristo, your premier destination for online shopping in Israel. Founded in 2025, we've been
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                  Welcome to Vristo, your premier destination for online shopping in Israel. Founded in 2023, we've been
                   committed to providing our customers with the best shopping experience, offering a wide range of
                   high-quality products at competitive prices.
                 </p>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
                   Our mission is to make online shopping accessible, convenient, and enjoyable for everyone. We believe
                   that shopping should be more than just a transaction – it should be an experience that brings joy and
                   satisfaction to our customers.
@@ -75,31 +75,31 @@ export default function InformationalPages() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card>
+            <div className="grid md:grid-cols-2 gap-8 w-full">
+              <Card className="bg-background border-blue-200 dark:border-blue-800">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-800 dark:text-gray-200">
                     <Info className="h-5 w-5 text-blue-600" />
                     Our Vision
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-300">
                     To become the leading e-commerce platform in Israel, connecting customers with the products they
                     love while supporting local businesses and communities.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-background border-blue-200 dark:border-blue-800">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-800 dark:text-gray-200">
                     <Shield className="h-5 w-5 text-green-600" />
                     Our Values
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-gray-600 dark:text-gray-300">
+                  <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                     <li>• Customer satisfaction is our top priority</li>
                     <li>• Quality products at fair prices</li>
                     <li>• Fast and reliable delivery</li>
@@ -109,15 +109,15 @@ export default function InformationalPages() {
               </Card>
             </div>
 
-            <div>
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Why Choose Vristo?</h3>
+            <div className="w-full">
+              <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Why Choose Vristo?</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="bg-blue-100 dark:bg-blue-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Shield className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Secure Shopping</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Secure Shopping</h4>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
                     Your personal and payment information is always protected with our advanced security measures.
                   </p>
                 </div>
@@ -125,8 +125,8 @@ export default function InformationalPages() {
                   <div className="bg-green-100 dark:bg-green-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Send className="h-8 w-8 text-green-600 dark:text-green-400" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Fast Delivery</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Fast Delivery</h4>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
                     Quick and reliable delivery across Israel, with same-day delivery available in select areas.
                   </p>
                 </div>
@@ -134,8 +134,8 @@ export default function InformationalPages() {
                   <div className="bg-purple-100 dark:bg-purple-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <MessageCircle className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">24/7 Support</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">24/7 Support</h4>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
                     Our customer support team is always here to help you with any questions or concerns.
                   </p>
                 </div>
@@ -146,20 +146,22 @@ export default function InformationalPages() {
 
       case "contact":
         return (
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Contact Us</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-200 mb-6">Contact Us</h2>
+              <p className="text-gray-700 dark:text-gray-300 mb-8">
                 We'd love to hear from you. Send us a message and we'll respond as soon as possible.
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-8 w-full">
               {/* Contact Form */}
-              <Card>
+              <Card className="bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-800 w-full">
                 <CardHeader>
-                  <CardTitle>Send us a Message</CardTitle>
-                  <CardDescription>Fill out the form below and we'll get back to you within 24 hours.</CardDescription>
+                  <CardTitle className="text-gray-900 dark:text-gray-200">Send us a Message</CardTitle>
+                  <CardDescription className="text-gray-600 dark:text-gray-400">
+                    Fill out the form below and we'll get back to you within 24 hours.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <form className="space-y-4">
@@ -171,7 +173,11 @@ export default function InformationalPages() {
                         >
                           First Name
                         </label>
-                        <Input id="firstName" placeholder="John" />
+                        <Input
+                          id="firstName"
+                          placeholder="John"
+                          className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                        />
                       </div>
                       <div>
                         <label
@@ -180,7 +186,11 @@ export default function InformationalPages() {
                         >
                           Last Name
                         </label>
-                        <Input id="lastName" placeholder="Doe" />
+                        <Input
+                          id="lastName"
+                          placeholder="Doe"
+                          className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                        />
                       </div>
                     </div>
                     <div>
@@ -190,7 +200,12 @@ export default function InformationalPages() {
                       >
                         Email Address
                       </label>
-                      <Input id="email" type="email" placeholder="john@example.com" />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="john@example.com"
+                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                      />
                     </div>
                     <div>
                       <label
@@ -199,7 +214,11 @@ export default function InformationalPages() {
                       >
                         Phone Number
                       </label>
-                      <Input id="phone" placeholder="+972-50-123-4567" />
+                      <Input
+                        id="phone"
+                        placeholder="+972-50-123-4567"
+                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                      />
                     </div>
                     <div>
                       <label
@@ -208,7 +227,11 @@ export default function InformationalPages() {
                       >
                         Subject
                       </label>
-                      <Input id="subject" placeholder="How can we help you?" />
+                      <Input
+                        id="subject"
+                        placeholder="How can we help you?"
+                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                      />
                     </div>
                     <div>
                       <label
@@ -217,7 +240,12 @@ export default function InformationalPages() {
                       >
                         Message
                       </label>
-                      <Textarea id="message" rows={4} placeholder="Tell us more about your inquiry..." />
+                      <Textarea
+                        id="message"
+                        rows={4}
+                        placeholder="Tell us more about your inquiry..."
+                        className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                      />
                     </div>
                     <Button type="submit" className="w-full">
                       <Send className="h-4 w-4 mr-2" />
@@ -228,11 +256,13 @@ export default function InformationalPages() {
               </Card>
 
               {/* Contact Information */}
-              <div className="space-y-6">
-                <Card>
+              <div className="space-y-6 w-full">
+                <Card className="bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-800">
                   <CardHeader>
-                    <CardTitle>Get in Touch</CardTitle>
-                    <CardDescription>Here are the different ways you can reach us.</CardDescription>
+                    <CardTitle className="text-gray-900 dark:text-gray-200">Get in Touch</CardTitle>
+                    <CardDescription className="text-gray-600 dark:text-gray-400">
+                      Here are the different ways you can reach us.
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="flex items-start gap-4">
@@ -240,9 +270,9 @@ export default function InformationalPages() {
                         <Mail className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900 dark:text-white">Email Us</h4>
-                        <p className="text-gray-600 dark:text-gray-300">support@vristo.com</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">We'll respond within 24 hours</p>
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-200">Email Us</h4>
+                        <p className="text-gray-700 dark:text-gray-300">support@vristo.com</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">We'll respond within 24 hours</p>
                       </div>
                     </div>
 
@@ -251,9 +281,9 @@ export default function InformationalPages() {
                         <Phone className="h-6 w-6 text-green-600 dark:text-green-400" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900 dark:text-white">Call Us</h4>
-                        <p className="text-gray-600 dark:text-gray-300">0506667277</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Available 24/7</p>
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-200">Call Us</h4>
+                        <p className="text-gray-700 dark:text-gray-300">0506667277</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Available 24/7</p>
                       </div>
                     </div>
 
@@ -262,31 +292,31 @@ export default function InformationalPages() {
                         <MapPin className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900 dark:text-white">Visit Us</h4>
-                        <p className="text-gray-600 dark:text-gray-300">Arad, Israel</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Monday - Friday, 9AM - 6PM</p>
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-200">Visit Us</h4>
+                        <p className="text-gray-700 dark:text-gray-300">Arad, Israel</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Monday - Friday, 9AM - 6PM</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-white dark:bg-gray-800 border-blue-200 dark:border-blue-800">
                   <CardHeader>
-                    <CardTitle>Business Hours</CardTitle>
+                    <CardTitle className="text-gray-900 dark:text-gray-200">Business Hours</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-300">Monday - Friday</span>
-                        <span className="font-medium">9:00 AM - 6:00 PM</span>
+                        <span className="text-gray-700 dark:text-gray-300">Monday - Friday</span>
+                        <span className="font-medium text-gray-900 dark:text-gray-200">9:00 AM - 6:00 PM</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-300">Saturday</span>
-                        <span className="font-medium">10:00 AM - 4:00 PM</span>
+                        <span className="text-gray-700 dark:text-gray-300">Saturday</span>
+                        <span className="font-medium text-gray-900 dark:text-gray-200">10:00 AM - 4:00 PM</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-300">Sunday</span>
-                        <span className="font-medium">Closed</span>
+                        <span className="text-gray-700 dark:text-gray-300">Sunday</span>
+                        <span className="font-medium text-gray-900 dark:text-gray-200">Closed</span>
                       </div>
                     </div>
                   </CardContent>
@@ -298,10 +328,10 @@ export default function InformationalPages() {
 
       case "faq":
         return (
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-8">
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">Frequently Asked Questions</h2>
+              <p className="text-gray-700 dark:text-gray-300 mb-8">
                 Find answers to the most common questions about our services, shipping, returns, and more.
               </p>
             </div>
@@ -309,16 +339,18 @@ export default function InformationalPages() {
             <Accordion type="single" collapsible className="w-full">
               {faqData.map((faq, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-gray-600 dark:text-gray-300">{faq.answer}</AccordionContent>
+                  <AccordionTrigger className="text-left text-gray-800 dark:text-gray-200">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-700 dark:text-gray-300">{faq.answer}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
 
-            <Card>
+            <Card className="bg-background border-blue-200 dark:border-blue-800 w-full">
               <CardHeader>
-                <CardTitle>Still have questions?</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-gray-800 dark:text-gray-200">Still have questions?</CardTitle>
+                <CardDescription className="text-gray-600 dark:text-gray-400">
                   Can't find the answer you're looking for? Please contact our customer support team.
                 </CardDescription>
               </CardHeader>
@@ -340,16 +372,16 @@ export default function InformationalPages() {
 
       case "terms":
         return (
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Terms of Service</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-8">Last updated: May 28, 2025</p>
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">Terms of Service</h2>
+              <p className="text-gray-700 dark:text-gray-300 mb-8">Last updated: January 1, 2025</p>
             </div>
 
-            <div className="prose prose-lg dark:prose-invert max-w-none space-y-6">
+            <div className="prose prose-lg dark:prose-invert max-w-none space-y-6 w-full">
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">1. Acceptance of Terms</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">1. Acceptance of Terms</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   By accessing and using Vristo's website and services, you accept and agree to be bound by the terms
                   and provision of this agreement. If you do not agree to abide by the above, please do not use this
                   service.
@@ -357,13 +389,13 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">2. Use License</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">2. Use License</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                   Permission is granted to temporarily download one copy of the materials on Vristo's website for
                   personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of
                   title, and under this license you may not:
                 </p>
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2">
                   <li>modify or copy the materials</li>
                   <li>use the materials for any commercial purpose or for any public display</li>
                   <li>attempt to reverse engineer any software contained on the website</li>
@@ -372,8 +404,8 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">3. Account Terms</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">3. Account Terms</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                   When you create an account with us, you must provide information that is accurate, complete, and
                   current at all times. You are responsible for safeguarding the password and for all activities that
                   occur under your account.
@@ -381,24 +413,28 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">4. Products and Services</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                  4. Products and Services
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   All products and services are subject to availability. We reserve the right to discontinue any product
                   or service at any time. Prices for our products are subject to change without notice.
                 </p>
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">5. Payment Terms</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">5. Payment Terms</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   Payment is due at the time of purchase. We accept various payment methods as displayed during
                   checkout. All payments are processed securely through our payment partners.
                 </p>
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">6. Shipping and Delivery</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                  6. Shipping and Delivery
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   We will make every effort to deliver products within the estimated timeframe. However, delivery times
                   are estimates and not guaranteed. Risk of loss and title for products pass to you upon delivery to the
                   carrier.
@@ -406,16 +442,16 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">7. Returns and Refunds</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">7. Returns and Refunds</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   We offer a 30-day return policy for most items. Items must be returned in original condition. Refunds
                   will be processed within 5-10 business days after we receive the returned item.
                 </p>
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">8. Contact Information</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">8. Contact Information</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   If you have any questions about these Terms of Service, please contact us at support@vristo.com or
                   call us at 0506667277.
                 </p>
@@ -426,20 +462,22 @@ export default function InformationalPages() {
 
       case "privacy":
         return (
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Privacy Policy</h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-8">Last updated: May 23, 2025</p>
+              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">Privacy Policy</h2>
+              <p className="text-gray-700 dark:text-gray-300 mb-8">Last updated: January 1, 2025</p>
             </div>
 
-            <div className="prose prose-lg dark:prose-invert max-w-none space-y-6">
+            <div className="prose prose-lg dark:prose-invert max-w-none space-y-6 w-full">
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">1. Information We Collect</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                  1. Information We Collect
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                   We collect information you provide directly to us, such as when you create an account, make a
                   purchase, or contact us. This may include:
                 </p>
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2">
                   <li>Name, email address, and phone number</li>
                   <li>Billing and shipping addresses</li>
                   <li>Payment information</li>
@@ -449,13 +487,13 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
                   2. How We Use Your Information
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                   We use the information we collect to:
                 </p>
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2">
                   <li>Process and fulfill your orders</li>
                   <li>Communicate with you about your account and orders</li>
                   <li>Provide customer support</li>
@@ -466,8 +504,8 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">3. Information Sharing</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">3. Information Sharing</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   We do not sell, trade, or otherwise transfer your personal information to third parties except as
                   described in this policy. We may share your information with trusted service providers who assist us
                   in operating our website and conducting our business.
@@ -475,8 +513,8 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">4. Data Security</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">4. Data Security</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   We implement appropriate security measures to protect your personal information against unauthorized
                   access, alteration, disclosure, or destruction. However, no method of transmission over the internet
                   is 100% secure.
@@ -484,8 +522,8 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">5. Cookies and Tracking</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">5. Cookies and Tracking</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   We use cookies and similar tracking technologies to enhance your browsing experience, analyze website
                   traffic, and understand where our visitors are coming from. You can control cookie settings through
                   your browser preferences.
@@ -493,9 +531,9 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">6. Your Rights</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">You have the right to:</p>
-                <ul className="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">6. Your Rights</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">You have the right to:</p>
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2">
                   <li>Access and update your personal information</li>
                   <li>Request deletion of your personal information</li>
                   <li>Opt-out of marketing communications</li>
@@ -504,24 +542,26 @@ export default function InformationalPages() {
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">7. Children's Privacy</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">7. Children's Privacy</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   Our services are not intended for children under 13 years of age. We do not knowingly collect personal
                   information from children under 13.
                 </p>
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">8. Changes to This Policy</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                  8. Changes to This Policy
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   We may update this privacy policy from time to time. We will notify you of any changes by posting the
                   new policy on this page and updating the "Last updated" date.
                 </p>
               </section>
 
               <section>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">9. Contact Us</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">9. Contact Us</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   If you have any questions about this Privacy Policy, please contact us at privacy@vristo.com or call
                   us at 0506667277.
                 </p>
@@ -536,21 +576,27 @@ export default function InformationalPages() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="page-background">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Information Center</h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1">Everything you need to know about Vristo</p>
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-blue-800">
+        <div className="container mx-auto px-4 py-12">
+          <div className="flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-200 mb-4">
+                Vristo Information Center
+              </h1>
+              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                Your comprehensive guide to everything you need to know about Vristo - from our story and values to
+                customer support, policies, and frequently asked questions. We're here to help you make the most of your
+                shopping experience with us.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-blue-800 sticky top-0 z-10">
         <div className="container mx-auto px-4">
           <div className="flex overflow-x-auto">
             {tabs.map((tab) => {
@@ -576,7 +622,7 @@ export default function InformationalPages() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">{renderContent()}</div>
+        <div className="w-full">{renderContent()}</div>
       </div>
     </div>
   )
