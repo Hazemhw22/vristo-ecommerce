@@ -18,7 +18,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .icon-button {
@@ -132,7 +132,8 @@ body {
 
 /* Smooth transitions for theme changes */
 .theme-transition {
-  transition: background-color 0.00001s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.00001s ease, color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 /* Dark mode debug indicator - remove in production */
@@ -151,7 +152,8 @@ body {
 
 /* Ensure dark mode transitions are smooth */
 * {
-  transition: background-color 0.001s ease, color 0.3s ease, border-color 0.000001s;
+  transition: background-color 0.001s ease, color 0.3s ease,
+    border-color 0.000001s;
 }
 
 /* Force dark mode styles to be more visible */
@@ -168,32 +170,35 @@ body {
 @keyframes glow-blue {
   0%,
   100% {
-    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(59, 130, 246, 0.3), 0 0 15px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5),
+      0 0 10px rgba(59, 130, 246, 0.3), 0 0 15px rgba(59, 130, 246, 0.2);
   }
   50% {
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.8),
+      0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
   }
 }
 
 @keyframes glow-blue-dark {
   0%,
   100% {
-    box-shadow: 0 0 5px rgba(96, 165, 250, 0.5), 0 0 10px rgba(96, 165, 250, 0.3), 0 0 15px rgba(96, 165, 250, 0.2);
+    box-shadow: 0 0 5px rgba(96, 165, 250, 0.5),
+      0 0 10px rgba(96, 165, 250, 0.3), 0 0 15px rgba(96, 165, 250, 0.2);
   }
   50% {
-    box-shadow: 0 0 10px rgba(96, 165, 250, 0.8), 0 0 20px rgba(96, 165, 250, 0.6), 0 0 30px rgba(96, 165, 250, 0.4);
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.8),
+      0 0 20px rgba(96, 165, 250, 0.6), 0 0 30px rgba(96, 165, 250, 0.4);
   }
 }
 
 .page-container {
   background-color: #ffffff;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s;
 }
 
 .dark .page-container {
   background-color: rgb(3 7 18);
 }
-
 
 /* Page background matching body */
 .page-background {
@@ -233,4 +238,8 @@ body {
 
 .dark .border-blue-800 {
   border-color: rgb(30 58 138) !important;
+}
+
+* {
+  transition: none !important;
 }

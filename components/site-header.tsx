@@ -7,7 +7,7 @@ import { useCart } from "./cart-provider";
 import { MobileNav } from "./mobile-nav";
 import { VristoLogo } from "./vristo-logo";
 import { LanguageSelector } from "./language-select";
-import { SimpleThemeToggle } from "./theme-toggle";
+import ThemeToggle from "./theme-toggle";
 import { useOnClickOutside } from "../hooks/use-click-outside";
 import { CartSidebar } from "./cart-sidebar";
 
@@ -15,6 +15,7 @@ export function SiteHeader() {
   const [mounted, setMounted] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { totalItems, totalPrice } = useCart();
@@ -50,7 +51,7 @@ export function SiteHeader() {
 
             <div className="flex items-center gap-3">
               {/* Desktop Theme Toggle */}
-              {mounted && <SimpleThemeToggle />}
+              {mounted && <ThemeToggle />}
 
               {/* Language Selector */}
               <LanguageSelector />
@@ -84,7 +85,7 @@ export function SiteHeader() {
 
             {/* الأيقونات - يمين */}
             <div className="flex items-center gap-2">
-              {mounted && <SimpleThemeToggle />}
+              {mounted && <ThemeToggle />}
               <LanguageSelector />
             </div>
           </div>
@@ -142,35 +143,77 @@ export function SiteHeader() {
               </nav>
             </div>
 
-            {/* Right: Icons (Mobile & Desktop) */}
-            <div className="flex items-center gap-3 w-full md:w-auto md:justify-end">
+            {/* Right: Icons (Desktop only) */}
+            <div className="flex items-center gap-3 md:ml-auto">
               {/* Desktop Search with side dropdown */}
-              <div ref={searchRef} className="relative hidden md:block">
-                {searchOpen ? (
-                  <div className="flex items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden shadow-lg">
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      placeholder="Search products..."
-                      className="w-64 py-2 px-4 bg-transparent focus:outline-none text-gray-900 dark:text-gray-100"
-                    />
-                    <button
-                      onClick={() => setSearchOpen(false)}
-                      className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                    >
-                      <X size={18} />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setSearchOpen(true)}
-                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    aria-label="Search"
-                  >
-                    <Search size={20} />
-                  </button>
-                )}
+              <div
+                ref={searchRef}
+                className="relative hidden md:flex items-center transition-all duration-300"
+                style={{ width: searchOpen ? 240 : 40 }}
+              >
+                <button
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  onClick={() => setSearchOpen((v) => !v)}
+                  aria-label="بحث"
+                  type="button"
+                  tabIndex={0}
+                  style={{ pointerEvents: searchOpen ? "none" : "auto" }} // يمنع تكرار الفتح عند الفتح
+                >
+                  <Search className="w-5 h-5" />
+                </button>
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search products..."
+                  className={`
+      pl-10 pr-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-sm outline-none w-full
+      transition-opacity duration-300
+      ${
+        searchOpen
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      }
+      text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
+    `}
+                  style={{ transition: "opacity 0.3s" }}
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onBlur={() => setSearchOpen(false)}
+                  autoFocus={searchOpen}
+                />
               </div>
+
+              {/* User */}
+              <Link
+                href="/account"
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label="الحساب"
+              >
+                <User size={20} />
+              </Link>
+
+              {/* Notifications */}
+              <button
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
+                aria-label="الإشعارات"
+              >
+                <Bell size={20} />
+                <span className="absolute -top-1 -right-1 flex h-2 w-2 rounded-full bg-red-500"></span>
+              </button>
+
+              {/* Cart */}
+              <button
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors relative"
+                onClick={handleCartToggle}
+                aria-label="السلة"
+              >
+                <ShoppingBag size={20} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white font-medium">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
         </div>

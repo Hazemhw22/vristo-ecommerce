@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { ThemeProvider } from "./theme-provider"
+import ThemeProvider from "./theme-provider";
 import { CartProvider } from "./cart-provider"
 import { FavoritesProvider } from "./favourite-items"
 import { SiteHeader } from "./site-header"

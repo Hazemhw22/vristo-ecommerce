@@ -1,36 +1,28 @@
-"use client"
-
-import { useEffect, type ReactNode } from "react"
-import { useThemeStore } from "../lib/theme-store"
+"use client";
+import { ReactNode, useEffect } from "react";
+import { useThemeStore } from "../lib/theme-store";
 
 interface ThemeProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
-  const initializeTheme = useThemeStore((state) => state.initializeTheme)
+export default function ThemeProvider({ children }: ThemeProviderProps) {
+  const { theme } = useThemeStore();
 
+  // Sync theme with html class on mount and theme change
   useEffect(() => {
-    // Initialize theme on mount
-    initializeTheme()
-
-    // Apply theme immediately if it exists in localStorage
-    const storedTheme = localStorage.getItem("vristo-theme")
-    if (storedTheme) {
-      try {
-        const parsed = JSON.parse(storedTheme)
-        if (parsed.state?.theme) {
-          const theme = parsed.state.theme
-          const isDark =
-            theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
-          document.documentElement.classList.remove("light", "dark")
-          document.documentElement.classList.add(isDark ? "dark" : "light")
-        }
-      } catch (error) {
-        console.warn("Failed to parse stored theme:", error)
-      }
+    const root = window.document.documentElement;
+    root.classList.remove("light", "dark");
+    if (
+      theme === "dark" ||
+      (theme === "system" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      root.classList.add("dark");
+    } else {
+      root.classList.add("light");
     }
-  }, [initializeTheme])
+  }, [theme]);
 
-  return <>{children}</>
+  return <>{children}</>;
 }

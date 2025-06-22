@@ -63,7 +63,7 @@ export function HeroSection() {
   const { title, subtitle, image, bgColor } = slides[activeSlide]
 
   return (
-    <section className="py-2 sm:py-4">
+    <section className=" ">
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSlide}
@@ -77,8 +77,8 @@ export function HeroSection() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
           className={`mx-auto max-w-sm sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 
-px-2 sm:px-6 md:px-8 rounded-xl shadow-lg border transition-all duration-500 
-${bgColor} border-gray-300 dark:border-gray-600`}
+                      px-2 sm:px-6 md:px-8 rounded-xl shadow-lg border transition-all duration-500 
+                      ${bgColor} border-gray-300 dark:border-gray-600`}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 items-center py-4 sm:py-10">
             <div className="flex flex-col items-start text-gray-900 dark:text-gray-100">
