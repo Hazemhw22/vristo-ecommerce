@@ -7,8 +7,7 @@ import { CategorySection } from "../components/category-section"
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-8 p-4 sm:p-8 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-300">
-
+    <main className="flex flex-col gap-4 sm:p-2 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-300">
       <HeroSection />
       <CategorySection />
       <RecommendedStores />

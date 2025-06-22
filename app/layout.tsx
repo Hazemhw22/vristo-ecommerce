@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-background text-foreground transition-colors duration-300">
         <AppProviders>
           <BreadcrumbsNav />
-          <main className="px-4 max-w-7xl mx-auto">{children}</main>
+          <main className=" max-w-7xl mx-auto">{children}</main>
         </AppProviders>
       </body>
     </html>

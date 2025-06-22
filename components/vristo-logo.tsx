@@ -1,11 +1,20 @@
-import type React from "react"
-import Image from "next/image"
+import type React from "react";
+import Image from "next/image";
+import clsx from "clsx";
 
-export function VristoLogo(_props: React.SVGProps<SVGSVGElement>) {
+interface VristoLogoProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: number;
+}
+
+export function VristoLogo({
+  size = 50,
+  className,
+  ...props
+}: VristoLogoProps) {
   return (
-    <div className="flex items-center gap-2 mb-0">
-      <Image src="/logo.svg" alt="Logo" width={32} height={32} />
-      <span className="text-xl font-bold">Vristo</span>
+    <div className={clsx("flex items-center gap-2", className)} {...props}>
+      <Image src="/logo.svg" alt="Logo" width={size} height={size} />
+      <span className="text-3xl font-bold">Vristo</span>
     </div>
-  )
+  );
 }
