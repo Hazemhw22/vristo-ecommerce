@@ -11,7 +11,6 @@ export default function Home() {
     <main className="flex flex-col md:flex-row gap-4 sm:p-2 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-300">
       {/* القسم الرئيسي */}
       <section className="flex-1 flex flex-col gap-4">
-        <FixedButtons/>
         <HeroSection />
         {/* قائمة التصنيفات في الموبايل - تحت الهيرو */}
         <div className="block md:hidden mb-4">
