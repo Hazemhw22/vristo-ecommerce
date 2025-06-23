@@ -21,7 +21,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSwipeable } from "react-swipeable"
-import ProductCard from "../../../components/ProductCard"
+import { ProductCard } from "../../../components/ProductCard"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -84,75 +84,111 @@ const shopData = {
 const bestSellingProducts = [
   {
     id: 1,
-    name: "Premium Arabic Coffee",
-    store: "Al-Mukhtar Roastery",
+    created_at: "2024-06-01T10:00:00Z",
+    shop: 1,
+    title: "Premium Arabic Coffee",
+    desc: "Freshly roasted premium Arabic coffee beans with rich flavor and aroma",
     price: 55,
-    discountedPrice: 45,
+    sale_price: 45,
+    discount_type: "fixed",
+    images: ["/placeholder.svg?height=300&width=300"],
+    category: 3,
     rating: 5,
     reviews: 89,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Coffee",
-    description: "Freshly roasted premium Arabic coffee beans with rich flavor and aroma",
+    stock: 100,
+    is_featured: true,
+    is_active: true,
+    tags: ["coffee", "arabic"],
   },
   {
     id: 2,
-    name: "Roasted Almonds",
-    store: "Al-Mukhtar Roastery",
+    created_at: "2024-06-01T10:00:00Z",
+    shop: 1,
+    title: "Roasted Almonds",
+    desc: "Premium quality roasted almonds, perfect for snacking",
     price: 40,
-    discountedPrice: 35,
+    sale_price: 35,
+    discount_type: "fixed",
+    images: ["/placeholder.svg?height=300&width=300"],
+    category: 1,
     rating: 4,
     reviews: 67,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Nuts",
-    description: "Premium quality roasted almonds, perfect for snacking",
+    stock: 80,
+    is_featured: false,
+    is_active: true,
+    tags: ["nuts", "almonds"],
   },
   {
     id: 3,
-    name: "Green Cardamom",
-    store: "Al-Mukhtar Roastery",
+    created_at: "2024-06-01T10:00:00Z",
+    shop: 1,
+    title: "Green Cardamom",
+    desc: "Fresh green cardamom pods with intense aroma",
     price: 30,
-    discountedPrice: 25,
+    sale_price: 25,
+    discount_type: "fixed",
+    images: ["/placeholder.svg?height=300&width=300"],
+    category: 2,
     rating: 5,
     reviews: 45,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Spices",
-    description: "Fresh green cardamom pods with intense aroma",
+    stock: 60,
+    is_featured: false,
+    is_active: true,
+    tags: ["spices", "cardamom"],
   },
   {
     id: 4,
-    name: "Mixed Spices",
-    store: "Al-Mukhtar Roastery",
+    created_at: "2024-06-01T10:00:00Z",
+    shop: 1,
+    title: "Mixed Spices",
+    desc: "Traditional Middle Eastern spice blend",
     price: 35,
-    discountedPrice: 28,
+    sale_price: 28,
+    discount_type: "fixed",
+    images: ["/placeholder.svg?height=300&width=300"],
+    category: 2,
     rating: 4,
     reviews: 52,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Spices",
-    description: "Traditional Middle Eastern spice blend",
+    stock: 70,
+    is_featured: false,
+    is_active: true,
+    tags: ["spices", "blend"],
   },
   {
     id: 5,
-    name: "Earl Grey Tea",
-    store: "Al-Mukhtar Roastery",
+    created_at: "2024-06-01T10:00:00Z",
+    shop: 1,
+    title: "Earl Grey Tea",
+    desc: "Premium Earl Grey tea with bergamot oil",
     price: 25,
-    discountedPrice: 20,
+    sale_price: 20,
+    discount_type: "fixed",
+    images: ["/placeholder.svg?height=300&width=300"],
+    category: 4,
     rating: 4,
     reviews: 38,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Tea",
-    description: "Premium Earl Grey tea with bergamot oil",
+    stock: 50,
+    is_featured: false,
+    is_active: true,
+    tags: ["tea", "earl grey"],
   },
   {
     id: 6,
-    name: "Cashew Nuts",
-    store: "Al-Mukhtar Roastery",
+    created_at: "2024-06-01T10:00:00Z",
+    shop: 1,
+    title: "Cashew Nuts",
+    desc: "Premium quality cashew nuts, lightly salted",
     price: 50,
-    discountedPrice: 42,
+    sale_price: 42,
+    discount_type: "fixed",
+    images: ["/placeholder.svg?height=300&width=300"],
+    category: 1,
     rating: 5,
     reviews: 73,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Nuts",
-    description: "Premium quality cashew nuts, lightly salted",
+    stock: 90,
+    is_featured: false,
+    is_active: true,
+    tags: ["nuts", "cashew"],
   },
 ]
 
@@ -385,7 +421,11 @@ export default function ShopDetailPage({ shopId }: ShopDetailPageProps) {
                   >
                     {bestSellingProducts.map((product) => (
                       <div key={product.id} className="min-w-[calc(25%-12px)]">
-                        <ProductCard product={product} />
+                        <ProductCard product={{ 
+                          ...product, 
+                          active: product.is_active, 
+                          discount_type: product.discount_type as "fixed" | "percentage" | null 
+                        }} />
                       </div>
                     ))}
                   </div>
@@ -405,7 +445,7 @@ export default function ShopDetailPage({ shopId }: ShopDetailPageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {bestSellingProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={{ ...product, active: product.is_active, discount_type: product.discount_type as "fixed" | "percentage" | null }} />
               ))}
             </div>
           </TabsContent>

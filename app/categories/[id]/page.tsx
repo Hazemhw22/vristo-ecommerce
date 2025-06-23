@@ -10,7 +10,7 @@ import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import ProductCard from "../../../components/ProductCard"
+import { ProductCard } from "../../../components/ProductCard"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -1157,9 +1157,25 @@ export default function CategoryDetailPage({ params }: PageProps) {
                     : "grid-cols-1"
                 }`}
               >
-                {paginatedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+                {paginatedProducts.map((product) => {
+                  // Map mock product to ProductCard expected shape
+                  const mappedProduct = {
+                    id: product.id,
+                    created_at: "2024-01-01T00:00:00Z", // mock date
+                    shop: 1, // mock shop id
+                    title: product.name,
+                    desc: product.description,
+                    price: product.price,
+                    images: [product.image],
+                    category: category ? category.id : null,
+                    sale_price: product.discountedPrice,
+                    discount_type: product.discountedPrice < product.price ? "fixed" as const : null,
+                    rating: product.rating,
+                    reviews: product.reviews,
+                    active: true, // Added required property
+                  }
+                  return <ProductCard key={product.id} product={mappedProduct} />
+                })}
               </div>
             )}
 
