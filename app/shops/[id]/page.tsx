@@ -250,13 +250,32 @@ export default function ShopDetailPage() {
               <div className="flex items-center gap-1 mb-2">
                 <Clock className="h-6 w-6 text-blue-500" />
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {todayWork ? todayWork.day : "اليوم"}
+                  {
+                    // اسم اليوم الحالي دائماً
+                    (() => {
+                      const days = [
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                      ];
+                      const today = new Date();
+                      return days[today.getDay()];
+                    })()
+                  }
                 </span>
               </div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 {todayWork
-                  ? `${todayWork.open} - ${todayWork.close}`
-                  : "لا يوجد دوام اليوم"}
+                  ? todayWork.open &&
+                    todayWork.close &&
+                    todayWork.open !== todayWork.close
+                    ? `${todayWork.open} - ${todayWork.close}`
+                    : "Closed"
+                  : "--"}
               </span>
               <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                 Now {currentTime}
