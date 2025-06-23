@@ -7,7 +7,9 @@ import { CartProvider } from "./cart-provider";
 import { FavoritesProvider } from "./favourite-items";
 import { SiteHeader } from "./site-header";
 import SiteFooter from "./site-footer";
-import FixedButtons from "./fixed-buttons"; // ✅ استيراد المكون الجديد
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function AppProviders({
   children,
@@ -15,18 +17,20 @@ export default function AppProviders({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider>
-      <CartProvider>
-        <FavoritesProvider>
-          <div className="min-h-screen flex flex-col page-background">
-            <SiteHeader />
-            <main className="flex-1 pb-28 page-container max-w-7xl mx-auto w-full m-4 p-4 sm:p-6 lg:p-8">
-              {children}
-            </main>
-            <SiteFooter />
-          </div>
-        </FavoritesProvider>
-      </CartProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <CartProvider>
+          <FavoritesProvider>
+            <div className="min-h-screen flex flex-col page-background">
+              <SiteHeader />
+              <main className="flex-1 pb-28 page-container max-w-7xl mx-auto w-full m-4 p-4 sm:p-6 lg:p-8">
+                {children}
+              </main>
+              <SiteFooter />
+            </div>
+          </FavoritesProvider>
+        </CartProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

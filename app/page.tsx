@@ -3,8 +3,8 @@ import BrandList from "../components/BrandList";
 import { GiftSection } from "../components/gift-section";
 import { PopularStores } from "../components/popular-stores";
 import CategoryMenu from "../components/CategoryMenu";
-import MainProductSection from "../components/MainProductSection";
-import { offers, bestSellers, selected } from "../lib/mockData";
+// import MainProductSection from "../components/MainProductSection";
+// import { offers, bestSellers, selected } from "../lib/mockData";
 import FixedButtons from "../components/fixed-buttons";
 export default function Home() {
   return (
@@ -16,7 +16,7 @@ export default function Home() {
         <div className="block md:hidden mb-4">
           <CategoryMenu />
         </div>
-        {/* أقسام المنتجات الرئيسية */}
+        {/* أقسام المنتجات الرئيسية
         <MainProductSection
           title="عروض اليوم"
           products={offers}
@@ -31,7 +31,7 @@ export default function Home() {
           title="منتجات مختارة"
           products={selected}
           linkToAll="/products?filter=selected"
-        />
+        /> */}
         <PopularStores />
         <GiftSection />
       </section>

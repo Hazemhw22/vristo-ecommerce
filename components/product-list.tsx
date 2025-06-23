@@ -1,27 +1,29 @@
 "use client"
 
-import ProductCard from "./ProductCard"
+import { ProductCard } from "./ProductCard";
 
-const productSample = {
-  id: 1,
-  name: "Product",
-  store: "Store",
-  price: 100,
-  discountedPrice: 75,
-  rating: 4,
-  reviews: 5,
-  image: "/pngimg.com - iphone16_PNG35.png?height=200&width=200",
-  category: "Phones",
+export interface Product {
+  id: number;
+  created_at: string;
+  shop: number;
+  title: string;
+  desc: string;
+  price: number;
+  images: string[];
+  category: number | null;
+  sale_price?: number | null;
+  discount_type?: "percentage" | "fixed" | null;
+  discount_value?: number | null;
+  discount_start?: string | null;
+  discount_end?: string | null;
+  active: boolean;
+  shops?: {
+    shop_name: string;
+  };
+  categories?: Category;
 }
 
-export function ProductsList({ count = 8 }: { count?: number }) {
-  const products = Array.from({ length: count }, (_, i) => ({
-    ...productSample,
-    id: i + 1,
-    name: `Product ${i + 1}`,
-    store: `Store ${i + 1}`,
-  }))
-
+export function ProductsList({ products }: { products: Product[] }) {
   return (
     <section className="py-6">
       <div className="max-w-screen-xl mx-auto px-2 sm:px-4">

@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { DualRangeSlider } from "../../components/ui/dualrangeslider"
-import { ProductsList } from "../../components/product-list"
-import { ChevronDown, SlidersHorizontal, X } from "lucide-react"
-import SortIcon from "../../components/SortIcon"
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "../../lib/supabase";
+import { DualRangeSlider } from "../../components/ui/dualrangeslider";
+import { ProductsList } from "../../components/product-list";
+import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
+import SortIcon from "../../components/SortIcon";
 
 import {
   Command,
@@ -13,21 +15,25 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../../components/ui/command"
+} from "../../components/ui/command";
 
-import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"
-import { Button } from "../../components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
+import { Button } from "../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu"
-import { Input } from "../../components/ui/input"
-import { Dialog } from "@headlessui/react"
+} from "../../components/ui/dropdown-menu";
+import { Input } from "../../components/ui/input";
+import { Dialog } from "@headlessui/react";
 
-const categories = ["All", "Category 1", "Category 2", "Category 3"]
-const brands = ["All", "Brand 1", "Brand 2", "Brand 3"]
+const categories = ["All", "Category 1", "Category 2", "Category 3"];
+const brands = ["All", "Brand 1", "Brand 2", "Brand 3"];
 
 function FilterSelect({
   label,
@@ -35,12 +41,12 @@ function FilterSelect({
   selected,
   onSelect,
 }: {
-  label: string
-  options: string[]
-  selected: string
-  onSelect: (value: string) => void
+  label: string;
+  options: string[];
+  selected: string;
+  onSelect: (value: string) => void;
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="mb-6">
@@ -58,7 +64,10 @@ function FilterSelect({
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <Command className="w-full">
-            <CommandInput placeholder={`Search ${label.toLowerCase()}...`} className="w-full px-3 py-2" />
+            <CommandInput
+              placeholder={`Search ${label.toLowerCase()}...`}
+              className="w-full px-3 py-2"
+            />
             <CommandList>
               <CommandEmpty>No {label.toLowerCase()} found.</CommandEmpty>
               <CommandGroup className="w-full">
@@ -66,8 +75,8 @@ function FilterSelect({
                   <CommandItem
                     key={option}
                     onSelect={() => {
-                      onSelect(option)
-                      setOpen(false)
+                      onSelect(option);
+                      setOpen(false);
                     }}
                     className="w-full text-sm text-gray-900 dark:text-gray-100 hover:bg-white dark:hover:bg-gray-700"
                   >
@@ -80,20 +89,49 @@ function FilterSelect({
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }
 
 export default function Products() {
-  const [minPrice, setMinPrice] = useState(0)
-  const [maxPrice, setMaxPrice] = useState(1000)
-  const [rating, setRating] = useState<number[]>([])
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [selectedBrand, setSelectedBrand] = useState("All")
-  const [filterOpen, setFilterOpen] = useState(false)
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1000);
+  const [rating, setRating] = useState<number[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedBrand, setSelectedBrand] = useState("All");
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  // جلب المنتجات من supabase
+  const {
+    data: products = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select(
+          `
+          id, created_at, shop, title, desc, price, images, category, sale_price, discount_type, discount_value, discount_start, discount_end, active,
+          shops:shops(shop_name),
+          categories:id, categories:title, categories:desc, categories:created_at
+        `
+        )
+        .eq("active", true);
+      if (error) throw error;
+      // Map shops from array to single object if needed
+      return (data ?? []).map((product: any) => ({
+        ...product,
+        shops: product.shops && Array.isArray(product.shops) ? product.shops[0] : product.shops,
+      }));
+    },
+  });
 
   const toggleRating = (star: number) => {
-    setRating((prev) => (prev.includes(star) ? prev.filter((r) => r !== star) : [...prev, star]))
-  }
+    setRating((prev) =>
+      prev.includes(star) ? prev.filter((r) => r !== star) : [...prev, star]
+    );
+  };
 
   return (
     <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4">
@@ -120,7 +158,12 @@ export default function Products() {
             onSelect={setSelectedCategory}
           />
 
-          <FilterSelect label="Brand" options={brands} selected={selectedBrand} onSelect={setSelectedBrand} />
+          <FilterSelect
+            label="Brand"
+            options={brands}
+            selected={selectedBrand}
+            onSelect={setSelectedBrand}
+          />
 
           <div className="space-y-4 mb-6">
             <h3 className="font-medium">Price Range</h3>
@@ -136,8 +179,8 @@ export default function Products() {
                 maxValue={maxPrice}
                 step={10}
                 onChange={({ min, max }) => {
-                  setMinPrice(min)
-                  setMaxPrice(max)
+                  setMinPrice(min);
+                  setMaxPrice(max);
                 }}
               />
             </div>
@@ -147,14 +190,19 @@ export default function Products() {
             <label className="font-semibold block mb-2">Rating</label>
             <div className="flex flex-col gap-2">
               {[5, 4, 3, 2, 1].map((star) => (
-                <label key={star} className="flex items-center gap-2 cursor-pointer select-none">
+                <label
+                  key={star}
+                  className="flex items-center gap-2 cursor-pointer select-none"
+                >
                   <input
                     type="checkbox"
                     checked={rating.includes(star)}
                     onChange={() => toggleRating(star)}
                     className="accent-yellow-400"
                   />
-                  <span className="text-yellow-400 text-3xl">{"★".repeat(star)}</span>
+                  <span className="text-yellow-400 text-3xl">
+                    {"★".repeat(star)}
+                  </span>
                 </label>
               ))}
             </div>
@@ -164,12 +212,21 @@ export default function Products() {
         {/* Products content */}
         <section className="w-full md:w-3/4">
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-            <h1 className="text-2xl font-bold flex items-center gap-2">Products Page</h1>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              Products Page
+            </h1>
             <div className="flex items-center gap-4 w-full md:w-auto">
-              <Input type="text" placeholder="Search products..." className="w-full md:w-80  border border-gray-400 dark:border-blue-800" />
+              <Input
+                type="text"
+                placeholder="Search products..."
+                className="w-full md:w-80  border border-gray-400 dark:border-blue-800"
+              />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2 whitespace-nowrap  border border-gray-400 dark:border-blue-800">
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2 whitespace-nowrap  border border-gray-400 dark:border-blue-800"
+                  >
                     <SortIcon className="w-6 h-6 text-gray-500 dark:text-gray-200 " />
                     Sort
                   </Button>
@@ -184,7 +241,9 @@ export default function Products() {
             </div>
           </div>
 
-          <ProductsList />
+          {isLoading && <div>جاري التحميل...</div>}
+          {error && <div>حدث خطأ أثناء جلب المنتجات</div>}
+          <ProductsList products={products} />
         </section>
       </div>
 
@@ -214,7 +273,12 @@ export default function Products() {
             onSelect={setSelectedCategory}
           />
 
-          <FilterSelect label="Brand" options={brands} selected={selectedBrand} onSelect={setSelectedBrand} />
+          <FilterSelect
+            label="Brand"
+            options={brands}
+            selected={selectedBrand}
+            onSelect={setSelectedBrand}
+          />
 
           <div className="space-y-4 mb-6">
             <h3 className="font-medium">Price Range</h3>
@@ -230,8 +294,8 @@ export default function Products() {
                 maxValue={maxPrice}
                 step={10}
                 onChange={({ min, max }) => {
-                  setMinPrice(min)
-                  setMaxPrice(max)
+                  setMinPrice(min);
+                  setMaxPrice(max);
                 }}
               />
             </div>
@@ -241,14 +305,19 @@ export default function Products() {
             <label className="font-semibold block mb-2">Rating</label>
             <div className="flex flex-col gap-2">
               {[5, 4, 3, 2, 1].map((star) => (
-                <label key={star} className="flex items-center gap-2 cursor-pointer select-none">
+                <label
+                  key={star}
+                  className="flex items-center gap-2 cursor-pointer select-none"
+                >
                   <input
                     type="checkbox"
                     checked={rating.includes(star)}
                     onChange={() => toggleRating(star)}
                     className="accent-yellow-400"
                   />
-                  <span className="text-yellow-400 text-lg">{"★".repeat(star)}</span>
+                  <span className="text-yellow-400 text-lg">
+                    {"★".repeat(star)}
+                  </span>
                 </label>
               ))}
             </div>
@@ -256,5 +325,5 @@ export default function Products() {
         </Dialog.Panel>
       </Dialog>
     </div>
-  )
+  );
 }
