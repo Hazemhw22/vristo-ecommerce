@@ -60,7 +60,7 @@ export function SiteHeader() {
         </div>
 
         {/* Main header */}
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
           {/* فقط للموبايل */}
           <div className="w-full flex md:hidden items-center justify-between gap-2">
             {/* الموقع - يسار */}
@@ -92,9 +92,9 @@ export function SiteHeader() {
 
           {/* باقي الهيدر للديسكتوب */}
           <div className="hidden md:flex items-center gap-8 w-full">
-            {/* Left: Logo & Navigation (Desktop) / Logo only (Mobile) */}
-            <div className="flex items-center gap-8">
-              <VristoLogo size={40} className="hidden md:block" />
+            <div className="flex items-center gap-3">
+              {/* قلل حجم الشعار */}
+              <VristoLogo size={60} className="hidden md:block" />
 
               {/* Navigation - Desktop only */}
               <nav className="hidden md:flex gap-6 text-sm font-medium">
@@ -298,12 +298,12 @@ export function SiteHeader() {
         </div>
 
         {/* الشعار والنص */}
-        <div className="flex flex-col items-center text-center flex-1">
+        <div className="flex flex-col items-center text-center flex-1 -translate-x-3">
           {/* شعار بحجم أكبر */}
-          <VristoLogo size={70} className="mb-4" />
+          <VristoLogo size={130} className="mb-0" />
 
-          {/* نص أكبر وتباعد أكبر */}
-          <span className="text-lg font-semibold text-gray-800 dark:text-gray-200 ">
+          {/* نص أصغر وتباعد أكبر */}
+          <span className="text-base font-semibold text-gray-800 dark:text-gray-200 ">
             تسوق الآن مع عالمنا الواسع
           </span>
         </div>

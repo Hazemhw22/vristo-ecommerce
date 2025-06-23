@@ -191,6 +191,8 @@ export function ProductCard({ product }: ProductCardProps) {
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" />
           <Dialog.Content className="fixed z-50 top-1/2 left-1/2 max-w-5xl w-[95vw] max-h-[90vh] overflow-auto rounded-2xl bg-white dark:bg-gray-900 shadow-2xl transform -translate-x-1/2 -translate-y-1/2 focus:outline-none border border-gray-200 dark:border-gray-700">
+            <Dialog.Title className="sr-only">تفاصيل المنتج</Dialog.Title>{" "}
+            {/* أضف هذا السطر */}
             <div className="grid md:grid-cols-2 gap-8 p-6">
               {/* Product Images */}
               <div className="space-y-4">
@@ -234,6 +236,26 @@ export function ProductCard({ product }: ProductCardProps) {
                   <p className="text-gray-600 dark:text-gray-400">
                     {product.categories?.title || ""}
                   </p>
+                  {/* Rating */}
+                  <div className="flex items-center gap-1 mt-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={20}
+                        className={
+                          i < Math.round(product.rating ?? 0)
+                            ? "text-yellow-400"
+                            : "text-gray-300 dark:text-gray-600"
+                        }
+                        fill={
+                          i < Math.round(product.rating ?? 0) ? "currentColor" : "none"
+                        }
+                      />
+                    ))}
+                    <span className="ml-2 text-gray-500 dark:text-gray-400 text-sm">
+                      ({product.reviews ?? 0})
+                    </span>
+                  </div>
                 </div>
 
                 {/* Description */}
@@ -319,7 +341,6 @@ export function ProductCard({ product }: ProductCardProps) {
                 </div>
               </div>
             </div>
-
             {/* Close Button */}
             <Dialog.Close className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
               <svg

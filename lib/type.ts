@@ -5,27 +5,23 @@ interface Category {
   created_at: string;
 }
 
-interface Shop {
-  shop_name: string;
-}
-
-interface Product {
-  id: number;
+export interface Product {
+  id: string;
   created_at: string;
-  shop: number;
+  shop: string;
   title: string;
   desc: string;
-  price: number;
+  price: string;
   images: string[];
   category: number | null;
+  shops?: { shop_name: string };
+  categories?: Category;
   sale_price?: number | null;
   discount_type?: "percentage" | "fixed" | null;
   discount_value?: number | null;
   discount_start?: string | null;
   discount_end?: string | null;
   active: boolean;
-  shops?: {
-    shop_name: string;
-  };
-  categories?: Category;
+  rating?: number;
+  reviews?: number;
 }

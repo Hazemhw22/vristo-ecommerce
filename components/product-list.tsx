@@ -2,6 +2,16 @@
 
 import { ProductCard } from "./ProductCard";
 
+// Define Category type or import it if defined elsewhere
+export interface Category {
+  id: number;
+  name: string;
+  desc: string;
+  title: string;
+  created_at: string;
+  // Add other fields as needed
+}
+
 export interface Product {
   id: number;
   created_at: string;

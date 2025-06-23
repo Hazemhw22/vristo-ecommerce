@@ -3,10 +3,22 @@ import BrandList from "../components/BrandList";
 import { GiftSection } from "../components/gift-section";
 import { PopularStores } from "../components/popular-stores";
 import CategoryMenu from "../components/CategoryMenu";
-// import MainProductSection from "../components/MainProductSection";
-// import { offers, bestSellers, selected } from "../lib/mockData";
-import FixedButtons from "../components/fixed-buttons";
+import MainProductSection from "../components/MainProductSection";
+
 export default function Home() {
+  // Dummy data for demonstration; replace with real data fetching logic as needed
+  interface Product {
+    id: number;
+    name: string;
+    price: number;
+    imageUrl: string;
+    // Add other product fields as needed
+  }
+
+  const offers: Product[] = [];
+  const bestSellers: Product[] = [];
+  const selected: Product[] = [];
+
   return (
     <main className="flex flex-col md:flex-row gap-4 sm:p-2 bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors duration-300">
       {/* القسم الرئيسي */}
@@ -16,7 +28,7 @@ export default function Home() {
         <div className="block md:hidden mb-4">
           <CategoryMenu />
         </div>
-        {/* أقسام المنتجات الرئيسية
+        أقسام المنتجات الرئيسية
         <MainProductSection
           title="عروض اليوم"
           products={offers}
@@ -31,7 +43,7 @@ export default function Home() {
           title="منتجات مختارة"
           products={selected}
           linkToAll="/products?filter=selected"
-        /> */}
+        />
         <PopularStores />
         <GiftSection />
       </section>

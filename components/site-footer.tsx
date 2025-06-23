@@ -22,10 +22,14 @@ const SiteFooter: React.FC = () => {
       <div className="container mx-auto px-4 max-w-[1280px]">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-20">
           {/* First column: Logo and newsletter */}
-          <div className="flex flex-col space-y-4">
-            <VristoLogo />
-            <p className="text-sm">Subscribe to our newsletter to get latest updates</p>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0">
+          <div className="flex flex-col space-y-4 items-center sm:items-start text-center sm:text-left">
+            <div className="w-full flex justify-center sm:justify-start">
+              <VristoLogo size={110} className="mx-auto sm:mx-0" />
+            </div>
+            <p className="text-sm w-full text-center sm:text-left">
+              Subscribe to our newsletter to get latest updates
+            </p>
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 w-full justify-center sm:justify-start">
               <input
                 type="email"
                 placeholder="Your Email Address"
@@ -35,45 +39,72 @@ const SiteFooter: React.FC = () => {
                 Subscribe
               </button>
             </div>
-            <div className="flex space-x-3 mt-6">
-              <a href="#" className="bg-blue-500 p-2 rounded-full text-white hover:bg-blue-600" aria-label="Instagram">
+            <div className="flex space-x-3 mt-6 justify-center w-full">
+              <a
+                href="#"
+                className="bg-blue-500 p-2 rounded-full text-white hover:bg-blue-600"
+                aria-label="Instagram"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="bg-blue-500 p-2 rounded-full text-white hover:bg-blue-600" aria-label="Facebook">
+              <a
+                href="#"
+                className="bg-blue-500 p-2 rounded-full text-white hover:bg-blue-600"
+                aria-label="Facebook"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="bg-blue-500 p-2 rounded-full text-white hover:bg-blue-600" aria-label="Twitter">
+              <a
+                href="#"
+                className="bg-blue-500 p-2 rounded-full text-white hover:bg-blue-600"
+                aria-label="Twitter"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
             </div>
           </div>
 
           {/* Second column: Quick links */}
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 items-center sm:items-start text-center sm:text-left">
             <h3 className="font-semibold text-base">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/stores/become-owner" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/stores/become-owner"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Become a Store Owner
                 </Link>
               </li>
               <li>
-                <Link href="/delivery/become-driver" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/delivery/become-driver"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Become a Delivery Man
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/help"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Help & Support
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/privacy"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/terms"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Terms & Conditions
                 </Link>
               </li>
@@ -81,20 +112,23 @@ const SiteFooter: React.FC = () => {
           </div>
 
           {/* Third column: Contact info */}
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 items-center sm:items-start text-center sm:text-left">
             <h3 className="font-medium mb-4">Contact Us</h3>
             <div className="flex flex-col space-y-4">
               <div>
-                <div className="flex items-center mb-2">
+                <div className="flex items-center justify-center sm:justify-start mb-2">
                   <Mail className="h-5 w-5 mr-2" />
                   <h4 className="font-medium">Send us Mail</h4>
                 </div>
-                <a href="mailto:support@vristo.com" className="text-sm hover:underline">
+                <a
+                  href="mailto:support@vristo.com"
+                  className="text-sm hover:underline"
+                >
                   support@vristo.com
                 </a>
               </div>
               <div>
-                <div className="flex items-center mb-2">
+                <div className="flex items-center justify-center sm:justify-start mb-2">
                   <Phone className="h-5 w-5 mr-2" />
                   <h4 className="font-medium">Contact Us</h4>
                 </div>
@@ -103,7 +137,7 @@ const SiteFooter: React.FC = () => {
                 </a>
               </div>
               <div>
-                <div className="flex items-center mb-2">
+                <div className="flex items-center justify-center sm:justify-start mb-2">
                   <MapPin className="h-5 w-5 mr-2" />
                   <h4 className="font-medium">Find us Here</h4>
                 </div>
@@ -113,21 +147,30 @@ const SiteFooter: React.FC = () => {
           </div>
 
           {/* Fourth column: Additional info */}
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 items-center sm:items-start text-center sm:text-left">
             <h3 className="font-semibold text-base">More Information</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/faq" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/faq"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   FAQs
                 </Link>
               </li>
               <li>
-                <Link href="/shipping" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/shipping"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Shipping Policy
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/returns"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Return & Exchange
                 </Link>
               </li>
@@ -152,7 +195,7 @@ const SiteFooter: React.FC = () => {
         </button>
       )}
     </footer>
-  )
+  );
 }
 
 export default SiteFooter

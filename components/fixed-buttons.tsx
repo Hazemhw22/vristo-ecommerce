@@ -9,7 +9,7 @@ export default function FixedButtons({
 }) {
   return (
     <div
-      className={`flex justify-around items-center py-2 bg-white border-t shadow-md ${className}`}
+      className={`flex justify-around items-center py-2 bg-background border-b border-border shadow-sm ${className}`}
     >
       <button className="flex flex-col items-center text-xs">
         <Download className="w-5 h-5 mb-1" />
