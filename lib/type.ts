@@ -25,3 +25,28 @@ export interface Product {
   rating?: number;
   reviews?: number;
 }
+
+
+export interface Shop {
+  id: number;
+  created_at: string;
+  owner: string; // This is a UUID string
+  shop_name: string;
+  shop_desc: string;
+  logo_url: string | null;
+  cover_image_url: string | null;
+  public: boolean;
+  status: string;
+  statusDropdownOpen?: boolean;
+  address?: string;
+  work_hours?: string[];
+  phone_numbers?: string[];
+  category_id?: number | null;
+  gallery?: string[];
+  latitude?: number | null;
+  longitude?: number | null;
+  profiles?: {
+    full_name: string;
+    email?: string;
+  };
+}

@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import type { Product } from "./type";
+import type { Product, Shop } from "./type";
 
 // For server components
 export const createServerSupabaseClient = () => {
@@ -51,6 +51,33 @@ export const fetchProductById = async (id: string | number) => {
   }
 
   return data as Product;
+};
+
+// Helper function to fetch shops (with work_hours as string[])
+export const fetchShops = async () => {
+  const supabase = createServerSupabaseClient();
+  const { data: shops, error } = await supabase
+    .from("shops")
+    .select(`
+      *,
+      profiles:profiles(full_name)
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+
+  // جلب أوقات العمل لكل متجر كسلسلة نصية
+  for (const shop of shops) {
+    const { data: work_hours } = await supabase
+      .from("work_hours")
+      .select("*")
+      .eq("shop_id", shop.id);
+
+    // حول كل عنصر إلى نص JSON أو أي تمثيل نصي يناسبك
+    shop.work_hours = (work_hours ?? []).map((wh) => JSON.stringify(wh));
+  }
+
+  return shops as Shop[];
 };
 
 export const supabase = createClient(
