@@ -8,25 +8,21 @@ import {
   Share2,
   Star,
   Clock,
-  Truck,
   MapPin,
-  Phone,
   Filter,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSwipeable } from "react-swipeable";
-import { ProductCard } from "../../../components/ProductCard";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { fetchShops } from "@/lib/supabase";
+import { fetchShops, supabase } from "@/lib/supabase";
+import { useQuery } from "@tanstack/react-query";
 import type { Shop } from "@/lib/type";
+import { ProductCard } from "../../../components/ProductCard";
 
 export default function ShopDetailPage() {
   const params = useParams();
@@ -36,10 +32,24 @@ export default function ShopDetailPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState("categories");
-  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // يمكنك جلب المنتجات من supabase حسب المتجر هنا إذا أردت
-  // const [products, setProducts] = useState<Product[]>([]);
+  // جلب المنتجات حسب اسم المتجر
+  const {
+    data: products = [],
+    isLoading: productsLoading,
+    error: productsError,
+  } = useQuery({
+    queryKey: ["products", shop?.id],
+    enabled: !!shop?.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("shop", shop?.id); // استخدم id وليس shop_name
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -55,32 +65,6 @@ export default function ShopDetailPage() {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
-  });
-
-  // Best selling products mock (يمكنك ربطها بالداتا الحقيقية)
-  const bestSellingProducts: any[] = []; // ضع هنا المنتجات الحقيقية أو اجلبها من supabase
-
-  const itemsPerView = {
-    desktop: 4,
-  };
-
-  const maxIndex = Math.max(
-    0,
-    bestSellingProducts.length - itemsPerView.desktop
-  );
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => Math.min(prev + itemsPerView.desktop, maxIndex));
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => Math.max(prev - itemsPerView.desktop, 0));
-  };
-
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: nextSlide,
-    onSwipedRight: prevSlide,
-    trackMouse: true,
   });
 
   // استخراج دوام اليوم الحالي إذا كان work_hours عبارة عن string[]
@@ -331,10 +315,23 @@ export default function ShopDetailPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {/* يمكنك هنا عرض المنتجات الحقيقية للمتجر */}
-              <div className="text-center text-gray-400 col-span-full">
-                لا توجد بيانات منتجات حقيقية
-              </div>
+              {productsLoading ? (
+                <div className="text-center text-gray-400 col-span-full">
+                  جاري تحميل المنتجات...
+                </div>
+              ) : productsError ? (
+                <div className="text-center text-red-500 col-span-full">
+                  حدث خطأ أثناء جلب المنتجات: {productsError.message}
+                </div>
+              ) : products.length === 0 ? (
+                <div className="text-center text-gray-400 col-span-full">
+                  لا توجد منتجات لهذا المتجر
+                </div>
+              ) : (
+                products.map((product: any) => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+              )}
             </div>
           </TabsContent>
         </Tabs>

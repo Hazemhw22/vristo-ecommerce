@@ -10,6 +10,7 @@ import { LanguageSelector } from "./language-select";
 import ThemeToggle from "./theme-toggle";
 import { useOnClickOutside } from "../hooks/use-click-outside";
 import { CartSidebar } from "./cart-sidebar";
+import CategoryMenu from "./CategoryMenu";
 
 export function SiteHeader() {
   const [mounted, setMounted] = useState(false);
@@ -231,22 +232,7 @@ export function SiteHeader() {
 
       {/* Mobile Categories Bar */}
       <div className="w-full md:hidden mt-4">
-        <div className="flex overflow-x-auto gap-2 pb-2 px-2">
-          {["الكل", "عطور", "أجهزة", "ملابس", "أحذية", "إكسسوارات"].map(
-            (cat, idx) => (
-              <button
-                key={idx}
-                className={`px-4 py-2 rounded-full ${
-                  idx === 0
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
-                } font-semibold whitespace-nowrap`}
-              >
-                {cat}
-              </button>
-            )
-          )}
-        </div>
+        <CategoryMenu />
       </div>
 
       {/* Mobile Logo, Name, Slogan, and Socials */}

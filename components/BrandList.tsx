@@ -12,7 +12,7 @@ export default function BrandList() {
   return (
     <>
       {/* العنوان */}
-      <div className="lg:flex mb-2 px-3 py-1 border border-blue-500 rounded-full text-blue-600 dark:text-white bg-blue-50 dark:bg-blue-900 font-semibold flex items-center justify-center">
+      <div className="hidden lg:flex mb-2 px-3 py-1 border border-blue-500 rounded-full text-blue-600 dark:text-white bg-blue-50 dark:bg-blue-900 font-semibold items-center justify-center">
         العلامات التجارية
       </div>
 

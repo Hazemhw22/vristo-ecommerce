@@ -243,3 +243,18 @@ body {
 * {
   transition: none !important;
 }
+
+/* إخفاء شريط السحب في الهاتف */
+@media (max-width: 767px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  /* لأن بعض المتصفحات لا تدعم display:none */
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

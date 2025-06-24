@@ -26,7 +26,7 @@ export default function Home() {
         <HeroSection />
         {/* قائمة التصنيفات في الموبايل - تحت الهيرو */}
         <div className="block md:hidden mb-4">
-          <CategoryMenu />
+          <BrandList />
         </div>
         أقسام المنتجات الرئيسية
         <MainProductSection
