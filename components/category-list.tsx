@@ -1,154 +1,99 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Search, ArrowRight, Package, TrendingUp } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import Link from "next/link"
-import Image from "next/image"
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Search, ArrowRight, Package, TrendingUp } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Link from "next/link";
+import Image from "next/image";
+import { supabase } from "@/lib/supabase";
 
-// Mock data for categories
-const categoriesData = [
-  {
-    id: "1",
-    name: "Electronics",
-    description: "Latest gadgets, smartphones, laptops, and electronic accessories",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 1250,
-    trending: true,
-    color: "from-blue-500 to-purple-600",
-  },
-  {
-    id: "2",
-    name: "Fashion & Clothing",
-    description: "Trendy clothes, shoes, accessories for men, women, and kids",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 890,
-    trending: false,
-    color: "from-pink-500 to-rose-600",
-  },
-  {
-    id: "3",
-    name: "Home & Garden",
-    description: "Furniture, home decor, kitchen appliances, and garden tools",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 675,
-    trending: true,
-    color: "from-green-500 to-emerald-600",
-  },
-  {
-    id: "4",
-    name: "Health & Beauty",
-    description: "Skincare, makeup, supplements, and wellness products",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 420,
-    trending: false,
-    color: "from-purple-500 to-indigo-600",
-  },
-  {
-    id: "5",
-    name: "Sports & Fitness",
-    description: "Exercise equipment, sportswear, and outdoor gear",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 380,
-    trending: true,
-    color: "from-orange-500 to-red-600",
-  },
-  {
-    id: "6",
-    name: "Books & Media",
-    description: "Books, magazines, movies, music, and educational content",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 560,
-    trending: false,
-    color: "from-teal-500 to-cyan-600",
-  },
-  {
-    id: "7",
-    name: "Food & Beverages",
-    description: "Fresh groceries, snacks, beverages, and gourmet foods",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 720,
-    trending: true,
-    color: "from-yellow-500 to-orange-600",
-  },
-  {
-    id: "8",
-    name: "Automotive",
-    description: "Car accessories, parts, tools, and maintenance products",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 290,
-    trending: false,
-    color: "from-gray-500 to-slate-600",
-  },
-  {
-    id: "9",
-    name: "Baby & Kids",
-    description: "Toys, baby care products, children's clothing, and educational items",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 450,
-    trending: true,
-    color: "from-pink-400 to-purple-500",
-  },
-  {
-    id: "10",
-    name: "Pet Supplies",
-    description: "Pet food, toys, accessories, and care products for all pets",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 180,
-    trending: false,
-    color: "from-amber-500 to-yellow-600",
-  },
-  {
-    id: "11",
-    name: "Office & Business",
-    description: "Office supplies, business equipment, and professional tools",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 320,
-    trending: false,
-    color: "from-blue-600 to-indigo-700",
-  },
-  {
-    id: "12",
-    name: "Arts & Crafts",
-    description: "Art supplies, craft materials, and creative tools",
-    image: "/placeholder.svg?height=200&width=300",
-    productCount: 240,
-    trending: true,
-    color: "from-violet-500 to-purple-600",
-  },
-]
+export interface Category {
+  id: number;
+  title: string;
+  desc: string;
+}
 
-type SortOption = "name" | "products" | "trending"
+type SortOption = "title" | "products" | "trending";
 
 export default function CategoriesPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [sortBy, setSortBy] = useState<SortOption>("name")
-  const [showTrendingOnly, setShowTrendingOnly] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("title");
+  const [showTrendingOnly, setShowTrendingOnly] = useState(false);
+  const [productCounts, setProductCounts] = useState<Record<number, number>>(
+    {}
+  );
 
-  // Filter and sort categories
-  const filteredAndSortedCategories = categoriesData
+  // جلب التصنيفات من قاعدة البيانات
+  const {
+    data: categories = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("categories").select("*");
+      if (error) throw error;
+      return data as Category[];
+    },
+  });
+
+  // جلب عدد المنتجات لكل تصنيف
+  useEffect(() => {
+    const fetchCounts = async () => {
+      if (!categories.length) return;
+      const counts: Record<number, number> = {};
+      for (const cat of categories) {
+        const { count } = await supabase
+          .from("products")
+          .select("*", { count: "exact", head: true })
+          .eq("category", cat.id);
+        counts[cat.id] = count || 0;
+      }
+      setProductCounts(counts);
+    };
+    fetchCounts();
+  }, [categories]);
+
+  // يمكنك إبقاء trending وهمي أو ربطه بجدول آخر
+  const categoriesWithExtra = categories.map((cat) => ({
+    ...cat,
+    productCount: productCounts[cat.id] ?? 0,
+    trending: Math.random() > 0.5,
+    image: "/placeholder.svg?height=200&width=300",
+    color: "from-blue-500 to-purple-600",
+  }));
+
+  // فلترة وفرز التصنيفات
+  const filteredAndSortedCategories = categoriesWithExtra
     .filter((category) => {
       const matchesSearch =
-        category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        category.description.toLowerCase().includes(searchQuery.toLowerCase())
-      const matchesTrending = !showTrendingOnly || category.trending
-      return matchesSearch && matchesTrending
+        category.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        category.desc.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesTrending = !showTrendingOnly || category.trending;
+      return matchesSearch && matchesTrending;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case "products":
-          return b.productCount - a.productCount
+          return b.productCount - a.productCount;
         case "trending":
-          return Number(b.trending) - Number(a.trending)
-        case "name":
+          return Number(b.trending) - Number(a.trending);
+        case "title":
         default:
-          return a.name.localeCompare(b.name)
+          return a.title.localeCompare(b.title);
       }
-    })
+    });
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -156,9 +101,12 @@ export default function CategoriesPage() {
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Shop by Categories</h1>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Shop by Categories
+            </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Discover thousands of products across all categories. Find exactly what you're looking for.
+              Discover thousands of products across all categories. Find exactly
+              what you're looking for.
             </p>
           </div>
 
@@ -179,12 +127,15 @@ export default function CategoriesPage() {
             {/* Filters */}
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
               <div className="flex items-center gap-4">
-                <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
+                <Select
+                  value={sortBy}
+                  onValueChange={(value: SortOption) => setSortBy(value)}
+                >
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="name">Alphabetical</SelectItem>
+                    <SelectItem value="title">Alphabetical</SelectItem>
                     <SelectItem value="products">Most Products</SelectItem>
                     <SelectItem value="trending">Trending First</SelectItem>
                   </SelectContent>
@@ -201,7 +152,8 @@ export default function CategoriesPage() {
               </div>
 
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                Showing {filteredAndSortedCategories.length} of {categoriesData.length} categories
+                Showing {filteredAndSortedCategories.length} of{" "}
+                {categories.length} categories
               </div>
             </div>
           </div>
@@ -210,13 +162,23 @@ export default function CategoriesPage() {
 
       {/* Categories Grid */}
       <div className="container mx-auto px-4 py-8">
-        {filteredAndSortedCategories.length === 0 ? (
+        {isLoading ? (
+          <div className="text-center py-12 text-gray-400">Loading...</div>
+        ) : error ? (
+          <div className="text-center py-12 text-red-500">
+            حدث خطأ أثناء جلب التصنيفات
+          </div>
+        ) : filteredAndSortedCategories.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
               <Search className="h-16 w-16 mx-auto" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No categories found</h3>
-            <p className="text-gray-600 dark:text-gray-400">Try adjusting your search or filters</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              No categories found
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Try adjusting your search or filters
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -230,11 +192,13 @@ export default function CategoriesPage() {
                   <div className="relative h-48 overflow-hidden">
                     <Image
                       src={category.image || "/placeholder.svg"}
-                      alt={category.name}
+                      alt={category.title}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-80`} />
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-80`}
+                    />
 
                     {/* Trending Badge */}
                     {category.trending && (
@@ -247,7 +211,9 @@ export default function CategoriesPage() {
 
                     {/* Category Name Overlay */}
                     <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">{category.name}</h3>
+                      <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
+                        {category.title}
+                      </h3>
                     </div>
                   </div>
 
@@ -255,13 +221,16 @@ export default function CategoriesPage() {
                   <div className="p-6 space-y-4">
                     {/* Description */}
                     <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
-                      {category.description}
+                      {category.desc}
                     </p>
 
                     {/* Product Count */}
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                       <Package className="h-4 w-4" />
-                      <span>{category.productCount.toLocaleString()} products available</span>
+                      <span>
+                        {category.productCount.toLocaleString()} products
+                        available
+                      </span>
                     </div>
 
                     {/* View Products Button */}
@@ -278,34 +247,6 @@ export default function CategoriesPage() {
           </div>
         )}
       </div>
-
-      {/* Stats Section */}
-      <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{categoriesData.length}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Categories</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                {categoriesData.reduce((sum, cat) => sum + cat.productCount, 0).toLocaleString()}
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Total Products</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">
-                {categoriesData.filter((cat) => cat.trending).length}
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Trending</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">24/7</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Support</div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  )
+  );
 }

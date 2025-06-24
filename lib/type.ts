@@ -1,8 +1,7 @@
-interface Category {
+export interface Category {
   id: number;
-  desc: string;
   title: string;
-  created_at: string;
+  desc: string;
 }
 
 export interface Product {
@@ -25,7 +24,6 @@ export interface Product {
   rating?: number;
   reviews?: number;
 }
-
 
 export interface Shop {
   id: number;

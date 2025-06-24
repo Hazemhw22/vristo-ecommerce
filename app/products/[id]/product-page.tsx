@@ -7,7 +7,16 @@ import { ImageLightbox } from "@/components/image-lightbox";
 import ProductTabs from "@/components/ProductTabs";
 import ProductRating from "@/components/ProductRating";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Heart, Minus, Plus, Printer, Share2, Copy, MessageCircle } from "lucide-react";
+import {
+  ShoppingCart,
+  Heart,
+  Minus,
+  Plus,
+  Printer,
+  Share2,
+  Copy,
+  MessageCircle,
+} from "lucide-react";
 import SuggestedProduct from "../../../components/SuggestedProductsCarousel";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../lib/supabase";
@@ -19,7 +28,10 @@ type ProductDetailProps = {
 
 export default function ProductDetail({ product }: ProductDetailProps) {
   const { addItem: addToCart } = useCart();
-  const { isFavorite, toggleFavorite } = useFavorites?.() ?? { isFavorite: () => false, toggleFavorite: () => {} };
+  const { isFavorite, toggleFavorite } = useFavorites?.() ?? {
+    isFavorite: () => false,
+    toggleFavorite: () => {},
+  };
   const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
   const [activeImage, setActiveImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -40,10 +52,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const handleShare = (type: string) => {
     const url = typeof window !== "undefined" ? window.location.href : "";
-    const text = `شاهد هذا المنتج: ${product.title} - ₪${product.sale_price ?? product.price}`;
+    const text = `شاهد هذا المنتج: ${product.title} - ₪${
+      product.sale_price ?? product.price
+    }`;
     switch (type) {
       case "whatsapp":
-        window.open(`https://wa.me/?text=${encodeURIComponent(text + " " + url)}`, "_blank");
+        window.open(
+          `https://wa.me/?text=${encodeURIComponent(text + " " + url)}`,
+          "_blank"
+        );
         break;
       case "copy":
         navigator.clipboard.writeText(url);
@@ -251,25 +268,25 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             {/* الكمية */}
             <div className="flex border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden w-max">
               <button
-                className="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                className="h-12 w-16 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 aria-label="إنقاص الكمية"
               >
-                <Minus size={32} />
+                <Minus size={20} />
               </button>
-              <div className="w-16 h-16 flex items-center justify-center font-semibold text-xl select-none">
+              <div className="h-12 w-16 flex items-center justify-center font-semibold text-base select-none">
                 {quantity}
               </div>
               <button
-                className="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                className="h-12 w-16 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
                 onClick={() => setQuantity(quantity + 1)}
                 aria-label="زيادة الكمية"
               >
-                <Plus size={32} />
+                <Plus size={20} />
               </button>
             </div>
 
-            {/* زر السلة: أيقونة فقط على الجوال، أيقونة + نص على الديسكتوب */}
+            {/* زر السلة */}
             <Button
               onClick={() =>
                 addToCart({
@@ -280,18 +297,18 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   quantity,
                 })
               }
-              className="h-16 w-16 sm:w-auto bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+              className="h-12 w-16 sm:w-auto bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
               aria-label="أضف إلى السلة"
             >
-              <ShoppingCart className="h-8 w-8" />
-              <span className="hidden sm:inline ml-2 text-lg">
+              <ShoppingCart className="h-6 w-6" />
+              <span className="hidden sm:inline ml-2 text-base">
                 أضف إلى السلة
               </span>
             </Button>
 
-            {/* زر المفضلة: أيقونة فقط على الجوال، أيقونة + نص على الديسكتوب */}
+            {/* زر المفضلة */}
             <button
-              className="w-16 h-16 sm:w-auto border border-gray-300 dark:border-gray-600 rounded-md flex items-center justify-center gap-2 px-0 sm:px-4"
+              className="h-12 w-16 sm:w-auto border border-gray-300 dark:border-gray-600 rounded-md flex items-center justify-center gap-2 px-0 sm:px-4"
               onClick={() =>
                 toggleFavorite?.({
                   id: Number(product.id),
@@ -311,7 +328,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               }
             >
               <Heart
-                size={32}
+                size={20}
                 className={
                   isFavorite?.(Number(product.id)) ? "text-red-500" : ""
                 }
@@ -319,7 +336,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   isFavorite?.(Number(product.id)) ? "currentColor" : "none"
                 }
               />
-              <span className="hidden sm:inline ml-2 text-lg">
+              <span className="hidden sm:inline ml-2 text-base">
                 {isFavorite?.(Number(product.id))
                   ? "إزالة من المفضلة"
                   : "إضافة إلى المفضلة"}
@@ -341,9 +358,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* منتجات مشابهة */}
       {similarProducts.length > 0 && (
         <div className="mt-20">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-            منتجات مشابهة
-          </h2>
           <SuggestedProduct
             products={similarProducts.map((p) => ({
               id: Number(p.id),

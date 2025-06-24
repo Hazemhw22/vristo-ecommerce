@@ -10,6 +10,8 @@ import {
   Clock,
   MapPin,
   Filter,
+  ShoppingBag,
+  LayoutGrid,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -287,9 +289,21 @@ export default function ShopDetailPage() {
       {/* Content Tabs */}
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="categories">Available Categories</TabsTrigger>
-            <TabsTrigger value="products">All Products</TabsTrigger>
+          <TabsList className="flex items-center gap-0 mb-6">
+            {/* Categories Tab with Icon */}
+            <TabsTrigger value="categories" className="flex items-center gap-2 px-4 py-2">
+              <LayoutGrid className="h-5 w-5" />
+              Available Categories
+            </TabsTrigger>
+
+            {/* Vertical Divider */}
+            <span className="h-8 w-px bg-gray-300 dark:bg-gray-700 mx-2" />
+
+            {/* Products Tab with Icon */}
+            <TabsTrigger value="products" className="flex items-center gap-2 px-4 py-2">
+              <ShoppingBag className="h-5 w-5" />
+              All Products
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="categories" className="space-y-8">
