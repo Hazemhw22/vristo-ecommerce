@@ -2,7 +2,18 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { Search, User, Bell, ShoppingBag, X } from "lucide-react";
+import {
+  Search,
+  User,
+  Bell,
+  ShoppingBag as BagIcon,
+  X,
+  Home,
+  List,
+  Heart,
+  Store,
+  Phone,
+} from "lucide-react";
 import { useCart } from "./cart-provider";
 import { MobileNav } from "./mobile-nav";
 import { VristoLogo } from "./vristo-logo";
@@ -101,43 +112,49 @@ export function SiteHeader() {
               <nav className="hidden md:flex gap-6 text-sm font-medium">
                 <Link
                   href="/"
-                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group flex items-center gap-1"
                 >
+                  <Home size={18} />
                   Home
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
                 </Link>
                 <Link
                   href="/categories"
-                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group flex items-center gap-1"
                 >
+                  <List size={18} />
                   Categories
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
                 </Link>
                 <Link
                   href="/favourite"
-                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group flex items-center gap-1"
                 >
+                  <Heart size={18} />
                   Favourite
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
                 </Link>
                 <Link
                   href="/shops"
-                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group flex items-center gap-1"
                 >
+                  <Store size={18} />
                   Shops
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
                 </Link>
                 <Link
                   href="/products"
-                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group flex items-center gap-1"
                 >
+                  <BagIcon size={18} />
                   Products
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
                 </Link>
                 <Link
                   href="/contact"
-                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative group flex items-center gap-1"
                 >
+                  <Phone size={18} />
                   Contact
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all group-hover:w-full"></span>
                 </Link>
@@ -208,7 +225,7 @@ export function SiteHeader() {
                 onClick={handleCartToggle}
                 aria-label="السلة"
               >
-                <ShoppingBag size={20} />
+                <BagIcon size={20} />
                 {totalItems > 0 && (
                   <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white font-medium">
                     {totalItems}

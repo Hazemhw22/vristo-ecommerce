@@ -672,6 +672,40 @@ export default function CheckoutPage() {
                       </div>
                     )}
                   </div>
+
+                  {/* Cash on Delivery */}
+                  <div
+                    className={`flex flex-col border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
+                      formData.paymentMethod === "cod"
+                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3 p-3">
+                      <RadioGroupItem value="cod" id="cod" />
+                      <Label
+                        htmlFor="cod"
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
+                        <Banknote size={18} />
+                        Cash on Delivery
+                      </Label>
+                    </div>
+                    {formData.paymentMethod === "cod" && (
+                      <div className="space-y-4 px-4 pb-4">
+                        <div className="flex items-center gap-2">
+                          <Banknote size={20} className="text-green-600" />
+                          <h4 className="font-medium text-sm">
+                            Pay with cash upon delivery
+                          </h4>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Please prepare the exact amount. Our courier will
+                          collect the payment when your order is delivered.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </RadioGroup>
               </CardContent>
             </Card>
