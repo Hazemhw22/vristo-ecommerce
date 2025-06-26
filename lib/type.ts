@@ -2,6 +2,7 @@ export interface Category {
   id: number;
   title: string;
   desc: string;
+  icon?: string; // Add this line to include the optional icon property
 }
 
 export interface Product {

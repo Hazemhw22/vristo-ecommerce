@@ -191,7 +191,7 @@ export default function Products() {
 
           {/* Brand Filter - ديسكتوب */}
           <div className="mb-6">
-            <label className="font-semibold block mb-1">Brand</label>
+            <label className="font-semibold block mb-1">Shops</label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -210,7 +210,7 @@ export default function Products() {
                     className="w-full px-3 py-2"
                   />
                   <CommandList>
-                    <CommandEmpty>No brands found.</CommandEmpty>
+                    <CommandEmpty>No shops found.</CommandEmpty>
                     <CommandGroup className="w-full">
                       {brands.map((option) => (
                         <CommandItem
@@ -352,7 +352,7 @@ export default function Products() {
 
           {/* Brand Filter - موبايل */}
           <div className="mb-6">
-            <label className="font-semibold block mb-1">Brand</label>
+            <label className="font-semibold block mb-1">Shops</label>
             <select
               className="w-full rounded border px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               value={selectedBrand}

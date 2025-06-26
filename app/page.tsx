@@ -28,7 +28,6 @@ export default function Home() {
         <div className="block md:hidden mb-4">
           <BrandList />
         </div>
-        أقسام المنتجات الرئيسية
         <MainProductSection
           title="عروض اليوم"
           products={offers}
@@ -47,7 +46,7 @@ export default function Home() {
         <PopularStores />
         <GiftSection />
       </section>
-
+      
       {/* الشريط الجانبي في الديسكتوب */}
       <aside className="hidden md:flex flex-col gap-6 md:w-56 lg:w-64 shrink-0 md:mt-0 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md">
         <CategoryMenu />

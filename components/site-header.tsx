@@ -167,15 +167,15 @@ export function SiteHeader() {
                   type="text"
                   placeholder="Search products..."
                   className={`
-      pl-10 pr-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-sm outline-none w-full
-      transition-opacity duration-300
-      ${
-        searchOpen
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
-      }
-      text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
-    `}
+                    pl-10 pr-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-sm outline-none w-full
+                    transition-opacity duration-300
+                    ${
+                      searchOpen
+                        ? "opacity-100 pointer-events-auto"
+                        : "opacity-0 pointer-events-none"
+                    }
+                    text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
+                  `}
                   style={{ transition: "opacity 0.3s" }}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
@@ -231,7 +231,7 @@ export function SiteHeader() {
       <CartSidebar isOpen={cartOpen} onClose={() => setCartOpen(false)} />
 
       {/* Mobile Categories Bar */}
-      <div className="w-full md:hidden mt-4">
+      <div className="w-full md:hidden ">
         <CategoryMenu />
       </div>
 
