@@ -56,7 +56,7 @@ export function PopularStores() {
       <div className="mx-auto max-w-screen-sm sm:max-w-2xl md:max-w-4xl lg:max-w-6xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-            Popular Stores
+            Popular Shopes
           </h2>
           <Link
             href="/shops"
