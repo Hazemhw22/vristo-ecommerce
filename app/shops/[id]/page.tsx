@@ -12,6 +12,7 @@ import {
   Filter,
   ShoppingBag,
   LayoutGrid,
+  Truck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +24,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { fetchShops, supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
-import type { Shop } from "@/lib/type";
+import type { Shop, Category, Product, WorkHours } from "@/lib/type";
 import { ProductCard } from "../../../components/ProductCard";
 
 export default function ShopDetailPage() {
@@ -34,8 +35,9 @@ export default function ShopDetailPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState("categories");
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  // جلب المنتجات حسب اسم المتجر
+  // جلب المنتجات حسب المتجر
   const {
     data: products = [],
     isLoading: productsLoading,
@@ -46,13 +48,22 @@ export default function ShopDetailPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
-        .eq("shop", shop?.id); // استخدم id وليس shop_name
+        .select("*, categories(*)")
+        .eq("shop", shop?.id);
       if (error) throw error;
       return data ?? [];
     },
   });
 
+  // جلب التصنيفات
+  useEffect(() => {
+    supabase
+      .from("categories")
+      .select("*")
+      .then(({ data }) => setCategories(data ?? []));
+  }, []);
+
+  // جلب بيانات المتجر
   useEffect(() => {
     setLoading(true);
     fetchShops()
@@ -69,10 +80,33 @@ export default function ShopDetailPage() {
     hour12: false,
   });
 
-  // استخراج دوام اليوم الحالي إذا كان work_hours عبارة عن string[]
-  let todayWork: { day: string; open: string; close: string } | null = null;
+  // استخراج دوام اليوم الحالي من النوع WorkHours
+  let todayWork: WorkHours | null = null;
+  let isOpen = false;
+  let openDays: string[] = [];
   if (shop?.work_hours && shop.work_hours.length > 0) {
-    const today = new Date();
+    let workHoursArr: WorkHours[] = [];
+    if (typeof shop.work_hours[0] === "string") {
+      workHoursArr = (shop.work_hours as string[])
+        .map((s) => {
+          try {
+            return JSON.parse(s) as WorkHours;
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean) as WorkHours[];
+    } else {
+      workHoursArr = (shop.work_hours as unknown as WorkHours[]).filter(
+        (wh) =>
+          typeof wh === "object" &&
+          wh !== null &&
+          "day" in wh &&
+          "open" in wh &&
+          "startTime" in wh &&
+          "endTime" in wh
+      );
+    }
     const days = [
       "Sunday",
       "Monday",
@@ -82,17 +116,26 @@ export default function ShopDetailPage() {
       "Friday",
       "Saturday",
     ];
-    const todayName = days[today.getDay()];
-    for (const whStr of shop.work_hours) {
-      try {
-        const wh = JSON.parse(whStr);
-        if (wh.day === todayName) {
-          todayWork = wh;
-          break;
-        }
-      } catch {}
+    const todayName = days[new Date().getDay()];
+    todayWork = workHoursArr.find((wh) => wh.day === todayName) ?? null;
+    openDays = workHoursArr.filter((wh) => wh.open).map((wh) => wh.day);
+
+    // تحقق من حالة المتجر الآن
+    if (todayWork && todayWork.open) {
+      const now = currentTime;
+      isOpen = now >= todayWork.startTime && now <= todayWork.endTime;
     }
   }
+
+  // استخراج التصنيفات الفريدة من المنتجات
+  const uniqueCategories: Category[] = products
+    .map((p: any) => p.categories)
+    .filter((cat) => cat && cat.id)
+    .filter((cat, idx, arr) => arr.findIndex((c) => c.id === cat.id) === idx);
+
+  // عدد المنتجات وعدد التصنيفات
+  const productsCount = products.length;
+  const categoriesCount = uniqueCategories.length;
 
   if (loading) {
     return (
@@ -183,11 +226,30 @@ export default function ShopDetailPage() {
               <div className="flex items-center gap-2">
                 <div
                   className={`w-3 h-3 rounded-full ${
-                    todayWork ? "bg-green-500" : "bg-red-500"
+                    isOpen ? "bg-green-500" : "bg-red-500"
                   } animate-pulse`}
+                  title={
+                    todayWork
+                      ? isOpen
+                        ? `Open until ${todayWork.endTime}`
+                        : "Closed"
+                      : "No working hours"
+                  }
                 />
                 <span className="text-lg font-medium">
-                  {todayWork ? `Open until ${todayWork.close}` : "Closed"}
+                  {todayWork
+                    ? isOpen
+                      ? `مفتوح حتى ${todayWork.endTime}`
+                      : "مغلق"
+                    : "لا يوجد دوام اليوم"}
+                </span>
+                <span className="ml-4 text-xs text-gray-200">
+                  {openDays.length > 0 && (
+                    <>
+                      <Clock className="inline h-4 w-4 mr-1" />
+                      {openDays.join(" / ")}
+                    </>
+                  )}
                 </span>
               </div>
             </div>
@@ -236,31 +298,26 @@ export default function ShopDetailPage() {
               <div className="flex items-center gap-1 mb-2">
                 <Clock className="h-6 w-6 text-blue-500" />
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {
-                    // اسم اليوم الحالي دائماً
-                    (() => {
-                      const days = [
-                        "Sunday",
-                        "Monday",
-                        "Tuesday",
-                        "Wednesday",
-                        "Thursday",
-                        "Friday",
-                        "Saturday",
-                      ];
-                      const today = new Date();
-                      return days[today.getDay()];
-                    })()
-                  }
+                  {(() => {
+                    const days = [
+                      "Sunday",
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                    ];
+                    const today = new Date();
+                    return days[today.getDay()];
+                  })()}
                 </span>
               </div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 {todayWork
-                  ? todayWork.open &&
-                    todayWork.close &&
-                    todayWork.open !== todayWork.close
-                    ? `${todayWork.open} - ${todayWork.close}`
-                    : "Closed"
+                  ? todayWork.open
+                    ? `${todayWork.startTime} - ${todayWork.endTime}`
+                    : "مغلق"
                   : "--"}
               </span>
               <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">
@@ -268,12 +325,13 @@ export default function ShopDetailPage() {
               </span>
             </div>
 
-            {/* Owner */}
+            {/* Owner + Delivery */}
             <div className="flex flex-col items-center">
-              <div className="flex items-center gap-1 mb-2">
+              <div className="flex items-center gap-2 mb-2">
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
                   {shop.profiles?.full_name ?? shop.owner}
                 </span>
+
               </div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Shop Owner
@@ -291,32 +349,77 @@ export default function ShopDetailPage() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="flex items-center gap-0 mb-6">
             {/* Categories Tab with Icon */}
-            <TabsTrigger value="categories" className="flex items-center gap-2 px-4 py-2">
+            <TabsTrigger
+              value="categories"
+              className="flex items-center gap-2 px-4 py-2"
+            >
               <LayoutGrid className="h-5 w-5" />
-              Available Categories
+              التصنيفات{" "}
+              <span className="ml-1 text-xs text-blue-600">
+                ({categoriesCount})
+              </span>
             </TabsTrigger>
 
             {/* Vertical Divider */}
             <span className="h-8 w-px bg-gray-300 dark:bg-gray-700 mx-2" />
 
             {/* Products Tab with Icon */}
-            <TabsTrigger value="products" className="flex items-center gap-2 px-4 py-2">
+            <TabsTrigger
+              value="products"
+              className="flex items-center gap-2 px-4 py-2"
+            >
               <ShoppingBag className="h-5 w-5" />
-              All Products
+              المنتجات{" "}
+              <span className="ml-1 text-xs text-blue-600">
+                ({productsCount})
+              </span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="categories" className="space-y-8">
-            {/* يمكنك هنا عرض التصنيفات الحقيقية للمتجر إذا كانت متوفرة */}
-            <div className="text-center text-gray-400">
-              لا توجد بيانات تصنيفات حقيقية
-            </div>
+            {/* عرض الكاتيجوريز المرتبطة بالمتجر على شكل كروت */}
+            {uniqueCategories.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {uniqueCategories.map((cat: Category) => (
+                  <Card
+                    key={cat.id}
+                    className="overflow-hidden shadow-md hover:shadow-lg transition"
+                  >
+                    <CardContent className="p-4 flex flex-col items-center">
+                      <div className="w-16 h-16 mb-3 rounded-full bg-gray-100 flex items-center justify-center">
+                        {cat.icon ? (
+                          <Image
+                            src={cat.icon}
+                            alt={cat.title}
+                            width={48}
+                            height={48}
+                            className="object-contain"
+                          />
+                        ) : (
+                          <LayoutGrid className="h-8 w-8 text-gray-400" />
+                        )}
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                        {cat.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                        {cat.desc ?? ""}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center text-gray-400">
+                لا توجد بيانات تصنيفات حقيقية
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="products" className="space-y-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                All Products
+                جميع المنتجات
               </h3>
               <Button
                 variant="outline"
@@ -324,7 +427,7 @@ export default function ShopDetailPage() {
                 className="flex items-center gap-2"
               >
                 <Filter className="h-4 w-4" />
-                Filter
+                تصفية
               </Button>
             </div>
 
@@ -342,8 +445,16 @@ export default function ShopDetailPage() {
                   لا توجد منتجات لهذا المتجر
                 </div>
               ) : (
-                products.map((product: any) => (
-                  <ProductCard key={product.id} product={product} />
+                products.map((product: Product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={{
+                      ...product,
+                      id: typeof product.id === "string" ? Number(product.id) : product.id,
+                      shop: typeof product.shop === "string" ? Number(product.shop) : product.shop,
+                      price: typeof product.price === "string" ? Number(product.price) : product.price,
+                    }}
+                  />
                 ))
               )}
             </div>

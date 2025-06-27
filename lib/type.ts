@@ -27,25 +27,32 @@ export interface Product {
 }
 
 export interface Shop {
-  id: number;
-  created_at: string;
-  owner: string; // This is a UUID string
+  id: string;
   shop_name: string;
-  shop_desc: string;
-  logo_url: string | null;
-  cover_image_url: string | null;
-  public: boolean;
+  address: string;
   status: string;
-  statusDropdownOpen?: boolean;
-  address?: string;
-  work_hours?: string[];
-  phone_numbers?: string[];
-  category_id?: number | null;
-  gallery?: string[];
+  public: boolean;
+  cover_image_url?: string;
+  logo_url?: string;
+  work_hours: string[];
+  owner: string;
+  profiles?: {
+    full_name?: string;
+  };
+  created_at?: string;
+  categories?: Category[]; // Added categories property
+  productsCount?: string;
   latitude?: number | null;
   longitude?: number | null;
-  profiles?: {
-    full_name: string;
-    email?: string;
-  };
+  phone_numbers?: string[];
+  gallery?: string[];
+  statusDropdownOpen?: boolean;
+  // ...other properties
+}
+
+export interface WorkHours {
+  day: string;
+  open: boolean;
+  startTime: string;
+  endTime: string;
 }

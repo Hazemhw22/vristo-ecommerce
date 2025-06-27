@@ -141,12 +141,14 @@ export default function CategoryDetailPage() {
     switch (sortBy) {
       case "price-low":
         filtered.sort(
-          (a, b) => Number(a.sale_price ?? a.price) - Number(b.sale_price ?? b.price)
+          (a, b) =>
+            Number(a.sale_price ?? a.price) - Number(b.sale_price ?? b.price)
         );
         break;
       case "price-high":
         filtered.sort(
-          (a, b) => Number(b.sale_price ?? b.price) - Number(a.sale_price ?? a.price)
+          (a, b) =>
+            Number(b.sale_price ?? b.price) - Number(a.sale_price ?? a.price)
         );
         break;
       case "rating":
@@ -499,7 +501,10 @@ export default function CategoryDetailPage() {
                             ...restProduct,
                             id: Number(product.id),
                             price: Number(product.price),
-                            shop: typeof product.shop === "string" ? Number(product.shop) : product.shop,
+                            shop:
+                              typeof product.shop === "string"
+                                ? Number(product.shop)
+                                : product.shop,
                           }}
                         />
                       );
@@ -594,7 +599,20 @@ export default function CategoryDetailPage() {
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex items-center gap-2 sm:gap-4">
-                    {/* يمكن إضافة خيارات فرز للمتاجر هنا إذا رغبت */}
+                    {/* Sort By for shops */}
+                    <Select
+                      value={sortBy}
+                      onValueChange={(value: SortOption) => setSortBy(value)}
+                    >
+                      <SelectTrigger className="w-36 sm:w-48 text-xs sm:text-sm">
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="name">Name A-Z</SelectItem>
+                        <SelectItem value="rating">Highest Rated</SelectItem>
+                        <SelectItem value="newest">Newest</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-right">
                     Showing{" "}
@@ -622,34 +640,46 @@ export default function CategoryDetailPage() {
                         .toLowerCase()
                         .includes(searchQuery.toLowerCase())
                     )
-                    .map((shop) => (
-                      <Card
-                        key={shop.id}
-                        className="flex flex-col items-center p-4"
-                      >
-                        <Image
-                          src={shop.logo_url || "/placeholder.svg"}
-                          alt={shop.shop_name}
-                          width={64}
-                          height={64}
-                          className="rounded-full mb-2 object-cover"
-                        />
-                        <div className="font-semibold text-lg">
-                          {shop.shop_name}
-                        </div>
-                        {shop.address && (
-                          <div className="text-xs text-gray-500 mt-1">
-                            {shop.address}
-                          </div>
-                        )}
-                        <Link
-                          href={`/shops/${shop.id}`}
-                          className="mt-3 text-blue-600 hover:underline text-sm"
+                    .map((shop) => {
+                      // حساب عدد المنتجات لكل متجر
+                      const shopProductsCount = products.filter(
+                        (p) => p.shops && (p.shops as any).id === shop.id
+                      ).length;
+                      return (
+                        <Card
+                          key={shop.id}
+                          className="flex flex-col items-center p-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg transition-shadow bg-white dark:bg-gray-900"
                         >
-                          View Shop
-                        </Link>
-                      </Card>
-                    ))}
+                          <div className="w-20 h-20 rounded-full overflow-hidden mb-2 border border-gray-300 dark:border-gray-700 bg-gray-100 flex items-center justify-center">
+                            <Image
+                              src={shop.logo_url || "/placeholder.svg"}
+                              alt={shop.shop_name}
+                              width={80}
+                              height={80}
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="font-semibold text-lg text-center">
+                            {shop.shop_name}
+                          </div>
+                          {shop.address && (
+                            <div className="text-xs text-gray-500 mt-1 text-center">
+                              {shop.address}
+                            </div>
+                          )}
+                          <div className="mt-2 flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
+                            <ShoppingBag className="h-4 w-4" />
+                            {shopProductsCount} Products
+                          </div>
+                          <Link
+                            href={`/shops/${shop.id}`}
+                            className="mt-3 text-blue-600 hover:underline text-sm font-medium"
+                          >
+                            View Shop
+                          </Link>
+                        </Card>
+                      );
+                    })}
                 </div>
               )}
             </div>

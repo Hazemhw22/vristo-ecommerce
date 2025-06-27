@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Search,
   Filter,
-  Clock,
+  Star,
   MapPin,
+  Clock,
+  Package,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -22,53 +24,90 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import Image from "next/image";
-import type { Shop } from "@/lib/type";
-import { fetchShops } from "@/lib/supabase";
+import { Category, Shop as ShopBase, WorkHours } from "@/lib/type";
+
+// Extend Shop type to include categoryTitle and shop_desc
+type Shop = ShopBase & { categoryTitle: string; shop_desc: string };
+import { supabase } from "@/lib/supabase";
 
 type SortOption = "rating" | "products" | "alphabetical" | "newest";
 
 export default function ShopsPage() {
+  const [shopsData, setShopsData] = useState<Shop[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("rating");
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  const [shops, setShops] = useState<Shop[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const itemsPerPage = 6;
 
+  // جلب البيانات الحقيقية من supabase
   useEffect(() => {
-    setLoading(true);
-    fetchShops()
-      .then((data) => setShops(data))
-      .finally(() => setLoading(false));
+    async function fetchData() {
+      setLoading(true);
+      // جلب المتاجر
+      const { data: shops, error: shopsError } = await supabase
+        .from("shops")
+        .select("*, profiles(full_name)");
+      // جلب التصنيفات
+      const { data: cats } = await supabase.from("categories").select("*");
+      if (!shopsError && shops && cats) {
+        setCategories(cats);
+        const { data: products } = await supabase
+          .from("products")
+          .select("shop");
+        const shopsWithCount = shops.map((shop) => {
+          const count = products
+            ? products.filter((p) => p.shop === shop.id).length
+            : 0;
+          return {
+            ...shop,
+            categoryTitle:
+              cats.find((cat) => cat.id === shop.category_id)?.title ||
+              "بدون تصنيف",
+            productsCount: count,
+          };
+        });
+        setShopsData(shopsWithCount);
+      }
+      setLoading(false);
+    }
+    fetchData();
   }, []);
 
   // Filter and sort shops
   const filteredAndSortedShops = useMemo(() => {
-    const filtered = shops.filter(
+    const filtered = shopsData.filter(
       (shop) =>
-        (shop.shop_name?.toLowerCase() ?? "").includes(
-          searchQuery.toLowerCase()
-        ) ||
-        (shop.address?.toLowerCase() ?? "").includes(searchQuery.toLowerCase())
+        shop.shop_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        shop.shop_desc?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        shop.address?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Sort based on selected option
     switch (sortBy) {
+      case "rating":
+        filtered.sort((a: any, b: any) => (b.rating ?? 0) - (a.rating ?? 0));
+        break;
+      case "products":
+        filtered.sort(
+          (a: any, b: any) => (b.productsCount ?? 0) - (a.productsCount ?? 0)
+        );
+        break;
       case "alphabetical":
         filtered.sort((a, b) =>
           (a.shop_name ?? "").localeCompare(b.shop_name ?? "")
         );
         break;
       case "newest":
-        filtered.sort((a, b) => b.id - a.id);
+        filtered.sort((a, b) => Number(b.id) - Number(a.id));
         break;
-      // يمكنك إضافة منطق rating/products إذا كان لديك هذه البيانات
     }
 
     return filtered;
-  }, [shops, searchQuery, sortBy]);
+  }, [shopsData, searchQuery, sortBy]);
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedShops.length / itemsPerPage);
@@ -82,31 +121,6 @@ export default function ShopsPage() {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  // Helper to parse work_hours string[] to object and get today's work hours
-  function getTodayWorkHours(work_hours?: string[]) {
-    if (!work_hours || work_hours.length === 0) return null;
-    const today = new Date();
-    const days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const todayName = days[today.getDay()];
-    for (const whStr of work_hours) {
-      try {
-        const wh = JSON.parse(whStr);
-        if (wh.day === todayName) return wh;
-      } catch {
-        // ignore parse error
-      }
-    }
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -156,9 +170,8 @@ export default function ShopsPage() {
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
-                  {/* يمكنك تفعيل الخيارات حسب بياناتك */}
-                  {/* <SelectItem value="rating">Top Rated</SelectItem>
-                  <SelectItem value="products">Most Products</SelectItem> */}
+                  <SelectItem value="rating">Top Rated</SelectItem>
+                  <SelectItem value="products">Most Products</SelectItem>
                   <SelectItem value="alphabetical">Alphabetical</SelectItem>
                   <SelectItem value="newest">Newest</SelectItem>
                 </SelectContent>
@@ -192,97 +205,174 @@ export default function ShopsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedShops.map((shop: Shop) => {
-              const todayWork = getTodayWorkHours(shop.work_hours);
-              return (
-                <Card
-                  key={shop.id}
-                  className="overflow-hidden hover:shadow-lg transition-all duration-300 group"
-                >
-                  <CardContent className="p-0">
-                    {/* Shop Cover Image */}
-                    <div className="relative h-48 overflow-hidden flex items-center justify-center">
-                      <Image
-                        src={shop.cover_image_url || "/placeholder.svg"}
-                        alt={shop.shop_name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black/20" />
-                      {/* Logo في منتصف أسفل الغلاف */}
-                      <div
-                        className="absolute left-1/2"
-                        style={{
-                          bottom: "0px", // ينزل اللوجو ليكون نصفه في الغلاف ونصفه في التفاصيل
-                          transform: "translateX(-50%)",
-                          zIndex: 10,
-                          pointerEvents: "none",
-                        }}
-                      >
-                        <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white flex items-center justify-center">
-                          <Image
-                            src={shop.logo_url || "/placeholder.svg"}
-                            alt={`${shop.shop_name} logo`}
-                            width={96}
-                            height={96}
-                            className="object-cover w-24 h-24"
-                          />
-                        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {paginatedShops.map((shop) => (
+              <Card
+                key={shop.id}
+                className="overflow-hidden hover:shadow-lg transition-all duration-300 group"
+              >
+                <CardContent className="p-0">
+                  {/* Shop Cover Image */}
+                  <div className="relative h-48 overflow-hidden flex items-center justify-center">
+                    <Image
+                      src={shop.cover_image_url || "/placeholder.svg"}
+                      alt={shop.shop_name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/20" />
+
+                    {/* Shop Logo في المنتصف */}
+                    <div
+                      className="absolute left-1/2"
+                      style={{
+                        bottom: "1rem",
+                        transform: "translateX(-50%)",
+                        zIndex: 10,
+                        pointerEvents: "none",
+                      }}
+                    >
+                      <div className="w-20 h-20 rounded-full border-4 border-white shadow-lg overflow-hidden bg-white flex items-center justify-center">
+                        <Image
+                          src={shop.logo_url || "/placeholder.svg"}
+                          alt={`${shop.shop_name} logo`}
+                          width={80}
+                          height={80}
+                          className="object-cover w-20 h-20"
+                        />
                       </div>
                     </div>
+                  </div>
 
-                    {/* Shop Info */}
-                    <div className="p-6 pt-16">
-                      <div className="mb-3 flex flex-col gap-1">
-                        <div className="flex items-center gap-2 justify-between w-full">
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
-                              {shop.shop_name}
-                            </h3>
-                            {/* دوام اليوم الحالي بجانب الاسم */}
-                            {shop.work_hours && shop.work_hours.length > 0 ? (
-                              todayWork ? (
-                                <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-300">
-                                  <Clock className="h-3 w-3" />
-                                  {todayWork.open} - {todayWork.close}
-                                </span>
-                              ) : (
-                                <span className="flex items-center gap-1 text-xs text-gray-400">
-                                  <Clock className="h-3 w-3" />
-                                  لا يوجد دوام اليوم
-                                </span>
-                              )
-                            ) : null}
-                          </div>
-                          {/* اسم المالك في أقصى الجهة */}
-                          <span className="text-xs text-gray-400 break-all ms-auto">
-                            {shop.profiles?.full_name ?? shop.owner}
+                  {/* Shop Info */}
+                  <div className="p-6 pt-4 flex flex-col gap-3">
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {shop.shop_name}
+                      </h3>
+                      <span className="text-xs text-gray-400 whitespace-nowrap ms-auto">
+                        {shop.profiles?.full_name ?? shop.owner}
+                      </span>
+                    </div>
+
+                    {/* الوصف */}
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                      {shop.shop_desc}
+                    </p>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-2 mb-2 text-center">
+                      <div className="flex flex-col items-center">
+                        <div className="flex items-center gap-1 mb-1">
+                          <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                          <span className="font-semibold text-gray-900 dark:text-white text-sm">
+                            {/* {shop.rating ?? "-"} */}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                          {shop.shop_desc}
-                        </p>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                          <MapPin className="h-4 w-4" />
-                          {shop.address}
-                          {/* التصنيف مقابل الموقع */}
-                          <Badge variant="outline" className="ms-auto">
-                            التصنيف رقم {shop.category_id ?? "غير محدد"}
-                          </Badge>
-                        </div>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {/* {shop.reviews ? `(${shop.reviews})` : ""} */}
+                        </span>
                       </div>
-                      {/* Visit Button */}
+                      <div className="flex flex-col items-center">
+                        <div className="flex items-center gap-1 mb-1">
+                          <Package className="h-4 w-4 text-blue-500" />
+                          <span className="font-semibold text-gray-900 dark:text-white text-sm">
+                            {shop.productsCount ?? "-"}
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          Products
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="flex items-center gap-1 mb-1">
+                          <Clock className="h-4 w-4 text-green-500" />
+                          <span className="font-semibold text-gray-900 dark:text-white text-xs">
+                            {/* {shop.delivery_time ?? "-"} */}
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          Delivery
+                        </span>
+                      </div>
+                    </div>
+                    {/* الكاتيجوري */}
+                    <div className="flex items-center gap-2 mb-1">
+                      <Badge variant="outline" className="text-xs px-2 py-1">
+                        {shop.categoryTitle}
+                      </Badge>
+                    </div>
+                    {/* الموقع */}
+                    <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mb-1">
+                      <MapPin className="h-4 w-4" />
+                      {shop.address}
+                    </div>
+
+                    {/* ساعات العمل */}
+                    <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mb-2">
+                      <Clock className="h-3 w-3" />
+                      {(() => {
+                        let workHoursArr: WorkHours[] = [];
+                        if (Array.isArray(shop.work_hours)) {
+                          if (
+                            shop.work_hours.length > 0 &&
+                            typeof shop.work_hours[0] === "string"
+                          ) {
+                            // Parse each string to WorkHours object
+                            workHoursArr = (shop.work_hours as string[])
+                              .map((s) => {
+                                try {
+                                  return JSON.parse(s);
+                                } catch {
+                                  return null;
+                                }
+                              })
+                              .filter(Boolean) as WorkHours[];
+                          } else {
+                            workHoursArr =
+                              shop.work_hours as unknown as WorkHours[];
+                          }
+                        } else if (typeof shop.work_hours === "string") {
+                          try {
+                            workHoursArr = JSON.parse(shop.work_hours);
+                          } catch {
+                            workHoursArr = [];
+                          }
+                        }
+                        // استدعاء اليوم الحالي فقط
+                        const days = [
+                          "Sunday",
+                          "Monday",
+                          "Tuesday",
+                          "Wednesday",
+                          "Thursday",
+                          "Friday",
+                          "Saturday",
+                        ];
+                        const today = days[new Date().getDay()];
+                        const todayWork = workHoursArr.find(
+                          (h) => h.day === today
+                        );
+                        return todayWork
+                          ? todayWork.open
+                            ? `${todayWork.day}: ${todayWork.startTime} - ${todayWork.endTime}`
+                            : `${todayWork.day}: مغلق`
+                          : "لا يوجد دوام اليوم";
+                      })()}
+                    </div>
+
+                    {/* Visit Button */}
+                    <div className="flex justify-end">
                       <Link href={`/shops/${shop.id}`}>
-                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                        <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm">
                           زيارة المتجر
                         </Button>
                       </Link>
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         )}
 

@@ -13,7 +13,6 @@ interface Category {
   id: number;
   desc: string;
   title: string;
-  created_at: string;
 }
 
 interface ProductCardProps {
@@ -208,7 +207,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
                 {/* Additional Images Grid */}
                 <div className="grid grid-cols-4 gap-2">
-                  {additionalImages.slice(1).map((image, index) => (
+                  {product.images.slice(1).map((image, index) => (
                     <div
                       key={index}
                       className="relative aspect-square rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800"
@@ -248,7 +247,9 @@ export function ProductCard({ product }: ProductCardProps) {
                             : "text-gray-300 dark:text-gray-600"
                         }
                         fill={
-                          i < Math.round(product.rating ?? 0) ? "currentColor" : "none"
+                          i < Math.round(product.rating ?? 0)
+                            ? "currentColor"
+                            : "none"
                         }
                       />
                     ))}
