@@ -63,7 +63,7 @@ export default function Products() {
     },
   });
 
-  // جلب المنتجات من supabase
+  // جلب المنتجات من supabase (بدون فلترة active)
   const {
     data: products = [],
     isLoading,
@@ -73,18 +73,22 @@ export default function Products() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*, shops:shops(shop_name)")
-        .eq("active", true);
+        .select("*, shops:shops(shop_name), categories:categories(title)")
+        .order("created_at", { ascending: false }); // ترتيب حسب الأحدث
       if (error) throw error;
-      // Map shops from array to single object if needed
       return (data ?? []).map((product: any) => ({
         ...product,
         shops:
           product.shops && Array.isArray(product.shops)
             ? product.shops[0]
             : product.shops,
+        categories:
+          product.categories && Array.isArray(product.categories)
+            ? product.categories[0]
+            : product.categories,
       }));
     },
+    refetchInterval: 5000, // يحدث البيانات كل 5 ثواني تلقائياً
   });
 
   // تفعيل الفلاتر
@@ -107,7 +111,8 @@ export default function Products() {
           : true
       )
       .filter(
-        (product: any) => product.price >= minPrice && product.price <= maxPrice
+        (product: any) =>
+          Number(product.price) >= minPrice && Number(product.price) <= maxPrice
       )
       .filter((product: any) =>
         rating.length > 0
@@ -206,7 +211,7 @@ export default function Products() {
               <PopoverContent className="w-full p-0">
                 <Command className="w-full">
                   <CommandInput
-                    placeholder="Search brands..."
+                    placeholder="Search shops..."
                     className="w-full px-3 py-2"
                   />
                   <CommandList>
@@ -233,13 +238,13 @@ export default function Products() {
           <div className="space-y-4 mb-6">
             <h3 className="font-medium">Price Range</h3>
             <div className="flex justify-between text-sm">
-              <span>${minPrice}</span>
-              <span>${maxPrice}</span>
+              <span>{minPrice} ₪</span>
+              <span>{maxPrice} ₪</span>
             </div>
             <div className="px-2">
               <DualRangeSlider
                 min={0}
-                max={1000}
+                max={10000}
                 minValue={minPrice}
                 maxValue={maxPrice}
                 step={10}
@@ -373,7 +378,7 @@ export default function Products() {
               <input
                 type="number"
                 min={0}
-                max={maxPrice}
+                max={10000}
                 value={minPrice}
                 onChange={(e) => setMinPrice(Number(e.target.value))}
                 className="w-1/2 rounded border px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -383,12 +388,13 @@ export default function Products() {
               <input
                 type="number"
                 min={minPrice}
-                max={1000}
+                max={10000}
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-1/2 rounded border px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="Max"
               />
+              <span className="text-xs text-gray-500">₪</span>
             </div>
           </div>
 

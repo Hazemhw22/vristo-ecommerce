@@ -36,6 +36,7 @@ export default function ShopDetailPage() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState("categories");
   const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   // جلب المنتجات حسب المتجر
   const {
@@ -313,13 +314,13 @@ export default function ShopDetailPage() {
                   })()}
                 </span>
               </div>
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                {todayWork
-                  ? todayWork.open
-                    ? `${todayWork.startTime} - ${todayWork.endTime}`
-                    : "مغلق"
-                  : "--"}
-              </span>
+              {todayWork && todayWork.open ? (
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {todayWork.startTime} - {todayWork.endTime}
+                </span>
+              ) : (
+                <span className="text-sm text-red-500 font-semibold">مغلق</span>
+              )}
               <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                 Now {currentTime}
               </span>
@@ -331,7 +332,6 @@ export default function ShopDetailPage() {
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
                   {shop.profiles?.full_name ?? shop.owner}
                 </span>
-
               </div>
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Shop Owner
@@ -377,43 +377,71 @@ export default function ShopDetailPage() {
           </TabsList>
 
           <TabsContent value="categories" className="space-y-8">
-            {/* عرض الكاتيجوريز المرتبطة بالمتجر على شكل كروت */}
-            {uniqueCategories.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {uniqueCategories.map((cat: Category) => (
-                  <Card
-                    key={cat.id}
-                    className="overflow-hidden shadow-md hover:shadow-lg transition"
-                  >
-                    <CardContent className="p-4 flex flex-col items-center">
-                      <div className="w-16 h-16 mb-3 rounded-full bg-gray-100 flex items-center justify-center">
-                        {cat.icon ? (
-                          <Image
-                            src={cat.icon}
-                            alt={cat.title}
-                            width={48}
-                            height={48}
-                            className="object-contain"
-                          />
-                        ) : (
-                          <LayoutGrid className="h-8 w-8 text-gray-400" />
-                        )}
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                        {cat.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-                        {cat.desc ?? ""}
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center text-gray-400">
-                لا توجد بيانات تصنيفات حقيقية
-              </div>
-            )}
+            <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
+              <button
+                className={`px-4 py-2 rounded-full border ${
+                  selectedCategory === null
+                    ? "bg-indigo-600 text-white"
+                    : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+                }`}
+                onClick={() => setSelectedCategory(null)}
+              >
+                الكل
+              </button>
+              {uniqueCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  className={`px-4 py-2 rounded-full border ${
+                    selectedCategory === cat.id
+                      ? "bg-indigo-600 text-white"
+                      : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+                  }`}
+                  onClick={() => setSelectedCategory(cat.id)}
+                >
+                  {cat.title}
+                </button>
+              ))}
+            </div>
+
+            {/* المنتجات حسب التصنيف المختار */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {(selectedCategory
+                ? products.filter((p: any) => p.category === selectedCategory)
+                : products
+              ).length === 0 ? (
+                <div className="col-span-full text-center text-gray-400">
+                  لا توجد منتجات لهذا التصنيف
+                </div>
+              ) : (
+                (selectedCategory
+                  ? products.filter((p: any) => p.category === selectedCategory)
+                  : products
+                ).map((product: Product) => (
+                  <ProductCard
+                    key={
+                      typeof product.id === "string"
+                        ? Number(product.id)
+                        : product.id
+                    }
+                    product={{
+                      ...product,
+                      id:
+                        typeof product.id === "string"
+                          ? Number(product.id)
+                          : product.id,
+                      shop:
+                        typeof product.shop === "string"
+                          ? Number(product.shop)
+                          : product.shop,
+                      price:
+                        typeof product.price === "string"
+                          ? Number(product.price)
+                          : product.price,
+                    }}
+                  />
+                ))
+              )}
+            </div>
           </TabsContent>
 
           <TabsContent value="products" className="space-y-6">
@@ -450,9 +478,18 @@ export default function ShopDetailPage() {
                     key={product.id}
                     product={{
                       ...product,
-                      id: typeof product.id === "string" ? Number(product.id) : product.id,
-                      shop: typeof product.shop === "string" ? Number(product.shop) : product.shop,
-                      price: typeof product.price === "string" ? Number(product.price) : product.price,
+                      id:
+                        typeof product.id === "string"
+                          ? Number(product.id)
+                          : product.id,
+                      shop:
+                        typeof product.shop === "string"
+                          ? Number(product.shop)
+                          : product.shop,
+                      price:
+                        typeof product.price === "string"
+                          ? Number(product.price)
+                          : product.price,
                     }}
                   />
                 ))
