@@ -81,11 +81,8 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   // صور إضافية للمعاينة
-  const additionalImages = [
-    mainImage,
-    ...product.images.slice(1, 5),
-    ...Array(4 - product.images.length).fill("/placeholder.svg"),
-  ];
+  const additionalImages =
+    product.images.length > 0 ? product.images : [mainImage];
 
   return (
     <>
@@ -163,11 +160,11 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="space-y-1">
               {product.price !== discountedPrice && (
                 <p className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                  ${product.price.toFixed(2)}
+                   {product.price.toFixed(2)} ₪
                 </p>
               )}
               <p className="text-lg font-bold text-gray-900 dark:text-white">
-                ${discountedPrice.toFixed(2)}
+                 {discountedPrice.toFixed(2)} ₪
               </p>
             </div>
             {/* زر الإضافة السريعة للسلة */}
@@ -268,15 +265,15 @@ export function ProductCard({ product }: ProductCardProps) {
                 <div className="space-y-2">
                   {product.price !== discountedPrice && (
                     <p className="text-lg text-gray-500 dark:text-gray-400 line-through">
-                      ${product.price.toFixed(2)}
+                      ₪{product.price.toFixed(2)}
                     </p>
                   )}
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    ${discountedPrice.toFixed(2)}
+                    ₪{discountedPrice.toFixed(2)}
                   </p>
                   {discountPercentage > 0 && (
                     <p className="text-green-600 dark:text-green-400 font-medium">
-                      You save ${(product.price - discountedPrice).toFixed(2)} (
+                      You save ₪{(product.price - discountedPrice).toFixed(2)} (
                       {discountPercentage}% off)
                     </p>
                   )}

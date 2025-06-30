@@ -300,7 +300,8 @@ export default function ShopDetailPage() {
                 <Clock className="h-6 w-6 text-blue-500" />
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
                   {(() => {
-                    const days = [
+                    // دعم العربية والإنجليزية
+                    const daysEn = [
                       "Sunday",
                       "Monday",
                       "Tuesday",
@@ -309,18 +310,63 @@ export default function ShopDetailPage() {
                       "Friday",
                       "Saturday",
                     ];
-                    const today = new Date();
-                    return days[today.getDay()];
+                    const daysAr = [
+                      "الأحد",
+                      "الإثنين",
+                      "الثلاثاء",
+                      "الأربعاء",
+                      "الخميس",
+                      "الجمعة",
+                      "السبت",
+                    ];
+                    const todayIndex = new Date().getDay();
+                    const todayEn = daysEn[todayIndex];
+                    const todayAr = daysAr[todayIndex];
+
+                    let workHoursArr: WorkHours[] = [];
+                    if (Array.isArray(shop.work_hours)) {
+                      if (
+                        shop.work_hours.length > 0 &&
+                        typeof shop.work_hours[0] === "string"
+                      ) {
+                        workHoursArr = (shop.work_hours as string[])
+                          .map((s) => {
+                            try {
+                              return JSON.parse(s) as WorkHours;
+                            } catch {
+                              return null;
+                            }
+                          })
+                          .filter(Boolean) as WorkHours[];
+                      } else {
+                        workHoursArr = shop.work_hours as unknown as WorkHours[];
+                      }
+                    } else if (typeof shop.work_hours === "string") {
+                      try {
+                        workHoursArr = JSON.parse(
+                          shop.work_hours
+                        ) as WorkHours[];
+                      } catch {
+                        workHoursArr = [];
+                      }
+                    }
+
+                    const todayWork = workHoursArr.find(
+                      (h) =>
+                        h.day?.toLowerCase() === todayEn.toLowerCase() ||
+                        h.day === todayAr
+                    );
+
+                    return todayWork
+                      ? `${todayWork.day}: ${
+                          todayWork.open
+                            ? `${todayWork.startTime} - ${todayWork.endTime}`
+                            : "مغلق"
+                        }`
+                      : `${todayEn}: لا يوجد دوام`;
                   })()}
                 </span>
               </div>
-              {todayWork && todayWork.open ? (
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  {todayWork.startTime} - {todayWork.endTime}
-                </span>
-              ) : (
-                <span className="text-sm text-red-500 font-semibold">مغلق</span>
-              )}
               <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                 Now {currentTime}
               </span>
